@@ -23,9 +23,7 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
+  margin: 10;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -47,7 +45,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: black;
 }
 button:focus,
 button:focus-visible {
@@ -60,9 +58,38 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: black;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #ff9c0b;
   }
+}
+
+.navBar {
+  display: flex;
+  align-items: center;
+  color: white;
+  background-color: #4775ff;
+  border-radius: 20px;
+}
+
+.navBar img {
+  padding: 10px;
+  border-radius: 30px;
+  height: 50px;
+}
+
+.board {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.column {
+  background-color: rgb(212, 228, 255);
+  color: black;
+  border-radius: 10px;
+  height: 500px;
+  width: 23%;
+  padding-top: 10px;
 }
