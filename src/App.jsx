@@ -2,6 +2,7 @@ import { useState } from "react";
 import NavBar from "./components/NavBar";
 import Body from "./components/Body";
 import KanbanBoard from "./components/KanbanBoard";
+import Chaser from "./components/Chaser";
 
 function App() {
   const [channel, setChannel] = useState("");
@@ -43,6 +44,7 @@ function App() {
         handleSendMessage={handleSendMessage}
         status={status}
       />
+      <Chaser />
       <KanbanBoard />
     </>
   );

@@ -1,7 +1,7 @@
 import KanbanColumn from "./KanbanColumns"
 
 function KanbanBoard() {
-  const items = ['Requested', 'Backlog', 'In Progress', 'Done'];
+  const items = ['Chased', 'Backlog', 'In Progress', 'Done'];
 
   return (
     <div className="board">

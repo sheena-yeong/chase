@@ -45,7 +45,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: black;
+  border-color: grey;
 }
 button:focus,
 button:focus-visible {
@@ -58,7 +58,7 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: black;
+    color: grey;
   }
   button {
     background-color: #ff9c0b;
@@ -83,6 +83,7 @@ button:focus-visible {
   display: flex;
   justify-content: space-around;
   text-align: center;
+  padding-top: 10px;
 }
 
 .column {
@@ -90,6 +91,16 @@ button:focus-visible {
   color: black;
   border-radius: 10px;
   height: 500px;
-  width: 23%;
+  width: 24%;
   padding-top: 10px;
+  border: solid 1px grey;
+}
+
+.chaser {
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  border: grey 1px solid;
+  border-style: dashed;
+  padding: 20px;
 }
