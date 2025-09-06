@@ -11,7 +11,7 @@ function App() {
 
   const handleSendMessage = async () => {
     try {
-      const res = await fetch("http://localhost:3001/send", {
+      const res = await fetch("http://localhost:3001/slack/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,9 +33,24 @@ function App() {
       setStatus(`❌ error: ${error.message}`);
     }
   };
+
+  const handleViewTasks = async () => {
+    try {
+      const res = await fetch("http://localhost:3001/airtable/tasks")
+
+      if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks")
+
+      const data = await res.json();
+      console.log("This was fetched from airtable", data)
+    } catch(error) {
+      setStatus(`❌ error: ${error.message}`);
+    }
+  }
+
   return (
     <>
       <NavBar />
+      <button onClick={handleViewTasks}>Fetch data from Airtable</button>
       <Body
         channel={channel}
         message={message}

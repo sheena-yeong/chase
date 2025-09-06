@@ -23,14 +23,9 @@ a:hover {
 }
 
 body {
-  margin: 10;
+  margin: 10px;
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 button {
@@ -64,6 +59,10 @@ button:focus-visible {
     background-color: #ff9c0b;
   }
 }
+
+/* p, input {
+  display: inline-block;
+} */
 
 .navBar {
   display: flex;
@@ -103,4 +102,16 @@ button:focus-visible {
   border: grey 1px solid;
   border-style: dashed;
   padding: 20px;
+}
+
+.card {
+  background-color: white;
+  width: 90%;
+  height: 10%;
+  border-radius: 5px;
+  margin: 0 auto;
+}
+
+.card p {
+  margin: 0;
 }

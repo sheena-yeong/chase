@@ -1,4 +1,4 @@
-import KanbanColumn from "./KanbanColumns"
+import KanbanColumn from "./KanbanColumn"
 
 function KanbanBoard() {
   const items = ['Chased', 'Backlog', 'In Progress', 'Done'];
