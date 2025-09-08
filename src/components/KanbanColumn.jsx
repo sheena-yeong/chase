@@ -1,10 +1,10 @@
 import TaskCard from "./TaskCard"
 
-function KanbanColumn({ title }) {
+function KanbanColumn({ title, tasks }) {
   return (
     <>
     <div className="column">{title}
-      <TaskCard />
+      <TaskCard tasks={tasks}/>
     </div>
     </>
   )

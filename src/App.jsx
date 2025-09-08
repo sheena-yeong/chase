@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "./components/NavBar";
 import Body from "./components/Body";
 import KanbanBoard from "./components/KanbanBoard";
@@ -8,6 +8,7 @@ function App() {
   const [channel, setChannel] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("");
+  const [tasks, setTasks] = useState([]);
 
   const handleSendMessage = async () => {
     try {
@@ -36,21 +37,40 @@ function App() {
 
   const handleViewTasks = async () => {
     try {
-      const res = await fetch("http://localhost:3001/airtable/tasks")
+      const res = await fetch("http://localhost:3001/airtable/tasks");
 
-      if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks")
+      if (!res.ok)
+        throw new Error("Failed to fetch records from Airtable Tasks");
 
       const data = await res.json();
-      console.log("This was fetched from airtable", data)
-    } catch(error) {
+      console.log("This was fetched from airtable", data);
+    } catch (error) {
       setStatus(`❌ error: ${error.message}`);
     }
-  }
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("http://localhost:3001/airtable/tasks");
+
+        if (!res.ok)
+          throw new Error("Failed to fetch records from Airtable Tasks");
+
+        const data = await res.json();
+        console.log("Fetched via useEffect from Airtable", data);
+        setTasks(data);
+      } catch (error) {
+        setStatus(`❌ error: ${error.message}`);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <>
       <NavBar />
-      <button onClick={handleViewTasks}>Fetch data from Airtable</button>
       <Body
         channel={channel}
         message={message}
@@ -60,7 +80,9 @@ function App() {
         status={status}
       />
       <Chaser />
-      <KanbanBoard />
+      <KanbanBoard 
+      tasks={tasks}
+      />
     </>
   );
 }

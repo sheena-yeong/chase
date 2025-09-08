@@ -109,7 +109,7 @@ button:focus-visible {
   width: 90%;
   height: 10%;
   border-radius: 5px;
-  margin: 0 auto;
+  margin: 5px auto;
 }
 
 .card p {
