@@ -3,7 +3,6 @@ import { useDrag } from "react-dnd";
 
 // Individual draggable card component
 function TaskCard({ task }) {
-  console.log("TaskCard received:", task)
   const [{ isDragging }, drag] = useDrag({
     // returns a "drag ref" functino that you attach to the element you want draggable
     type: "TASK", // A category that i define. useDrop must accept 'TASK' for the drop to work

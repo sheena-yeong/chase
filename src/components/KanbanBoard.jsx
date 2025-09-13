@@ -43,25 +43,25 @@ function KanbanBoard({ tasks, setTasks }) {
     } catch (error) {
       console.error("Failed to update task:", error);
 
-      setTasks(originaltasks);
+      setTasks(originalTasks);
     }
   };
-}
 
-return (
-  <div className="board">
-    <DndProvider backend={HTML5Backend}>
-      {columns.map((column, index) => (
-        <KanbanColumn
-          setTasks={setTasks}
-          key={index}
-          title={column}
-          tasks={tasks.filter((task) => task.fields.Column === column)}
-          onMoveTask={handleMoveTask}
-        />
-      ))}
-    </DndProvider>
-  </div>
-);
+  return (
+    <div className="board">
+      <DndProvider backend={HTML5Backend}>
+        {columns.map((column, index) => (
+          <KanbanColumn
+            setTasks={setTasks}
+            key={index}
+            title={column}
+            tasks={tasks.filter((task) => task.fields.Column === column)}
+            onMoveTask={handleMoveTask}
+          />
+        ))}
+      </DndProvider>
+    </div>
+  );
+}
 
 export default KanbanBoard;
