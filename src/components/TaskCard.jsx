@@ -23,7 +23,6 @@ function TaskCard({ task }) {
       }}
     >
       <p>{task.fields.Task}</p>
-      <p>Status: {task.fields.Status}</p>
     </div>
   );
 }
