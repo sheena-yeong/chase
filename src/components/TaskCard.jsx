@@ -1,41 +1,30 @@
 // import Draggable from "react-draggable"; // react-draggable uses findDOMNode, which has been deprecated in React 18's StrictMode
-
-import { DndProvider, useDrag } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDrag } from "react-dnd";
 
 // Individual draggable card component
-function DraggableTaskCard({ task }) {
+function TaskCard({ task }) {
+  console.log("TaskCard received:", task)
   const [{ isDragging }, drag] = useDrag({
-    type: 'TASK',
-    item: { id: task.id, task },
+    // returns a "drag ref" functino that you attach to the element you want draggable
+    type: "TASK", // A category that i define. useDrop must accept 'TASK' for the drop to work
+    item: { id: task.id, task }, // the payload - the data carried with the draggable item
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
 
   return (
-    <div 
+    <div
       ref={drag}
       className="card"
-      style={{ 
+      style={{
         opacity: isDragging ? 0.5 : 1,
-        cursor: 'move'
+        cursor: "move",
       }}
     >
       <p>{task.fields.Task}</p>
       <p>Status: {task.fields.Status}</p>
     </div>
-  );
-}
-
-function TaskCard({ tasks }) {
-  console.log("Hi from TaskCard, this is tasks prop-drilled", tasks);
-  return (
-    <DndProvider backend={HTML5Backend}>
-      {tasks.map((task) => (
-        <DraggableTaskCard key={task.id} task={task} />
-      ))}
-    </DndProvider>
   );
 }
 

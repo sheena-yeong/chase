@@ -50,6 +50,7 @@ function App() {
   };
 
   useEffect(() => {
+    console.log("useEffect is running!");
     async function fetchData() {
       try {
         const res = await fetch("http://localhost:3001/airtable/tasks");
@@ -81,6 +82,7 @@ function App() {
       />
       <Chaser />
       <KanbanBoard 
+      setTasks={setTasks}
       tasks={tasks}
       />
     </>
