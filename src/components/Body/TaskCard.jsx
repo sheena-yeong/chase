@@ -2,7 +2,14 @@
 import { useDrag } from "react-dnd";
 
 // Individual draggable card component
-function TaskCard({ task }) {
+function TaskCard({
+  task,
+  handleSendMessage,
+  message,
+  channel,
+  setMessage,
+  setChannel,
+}) {
   const [{ isDragging }, drag] = useDrag({
     // returns a "drag ref" functino that you attach to the element you want draggable
     type: "TASK", // A category that i define. useDrop must accept 'TASK' for the drop to work
@@ -22,6 +29,15 @@ function TaskCard({ task }) {
       }}
     >
       <p>{task.fields.Task}</p>
+      {task.fields.Column === "Waiting on others" && (
+        <button
+          className="featherBtn"
+          aria-label="Send message"
+          onClick={() => handleSendMessage(task.fields.Task, task.fields.Description)}
+        >
+          🪿
+        </button>
+      )}
     </div>
   );
 }

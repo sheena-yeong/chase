@@ -1,4 +1,4 @@
-import logo from '../assets/chase_logo.png';
+import logo from '../../assets/chase_logo.png';
 
 function NavBar() {
   return (

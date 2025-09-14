@@ -25,6 +25,8 @@ function Body({
       </button>
       <br />
       <p>Status: {status}</p>
+      <button>Send Summary</button>
+      <button>Chase All</button>
     </>
   );
 }

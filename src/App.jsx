@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar/NavBar";
 import Body from "./components/Body";
-import KanbanBoard from "./components/KanbanBoard";
+import KanbanBoard from "./components/Body/KanbanBoard";
 import Chaser from "./components/Chaser";
 
 function App() {
-  const [channel, setChannel] = useState("");
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState("");
   const [tasks, setTasks] = useState([]);
+  
+  const handleSendMessage = async (task, description) => {
+    const messageFormats = [
+      "HONK! This task isn't doing itself:",
+      "Waddle over and finish this:",
+      "Goose on patrol: finish this ASAP:",
+      "Friendly goose reminder: this task is still waddling behind schedule:",
+    ];
+  
+    const randomMessageFormat = messageFormats[Math.floor(Math.random() * messageFormats.length)];
 
-  const handleSendMessage = async () => {
     try {
       const res = await fetch("http://localhost:3001/slack/send", {
         method: "POST",
@@ -18,34 +24,21 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          channel,
-          text: message,
+          channel: "C09CQ4J6NLF",
+          text: `🪿 *${randomMessageFormat}*\n• ${task} | ${description}`,
         }),
       });
+      console.log("Sending:", { channel: "C09CQ4J6NLF", text: message });
 
       const data = await res.json();
 
       if (data.ok) {
-        setStatus("✅ Message sent successfully!");
+        console.log("✅ Message sent successfully!");
       } else {
-        setStatus(`❌ Slack error: ${data.error}`);
+        console.log(`❌ Sending error: ${data.error}`);
       }
     } catch (error) {
-      setStatus(`❌ error: ${error.message}`);
-    }
-  };
-
-  const handleViewTasks = async () => {
-    try {
-      const res = await fetch("http://localhost:3001/airtable/tasks");
-
-      if (!res.ok)
-        throw new Error("Failed to fetch records from Airtable Tasks");
-
-      const data = await res.json();
-      console.log("This was fetched from airtable", data);
-    } catch (error) {
-      setStatus(`❌ error: ${error.message}`);
+      setStatus(`❌ Sending error: ${error.message}`);
     }
   };
 
@@ -72,18 +65,19 @@ function App() {
   return (
     <>
       <NavBar />
-      <Body
+      {/* <Body
         channel={channel}
         message={message}
         setChannel={setChannel}
         setMessage={setMessage}
         handleSendMessage={handleSendMessage}
         status={status}
-      />
-      <Chaser />
-      <KanbanBoard 
-      setTasks={setTasks}
-      tasks={tasks}
+      /> */}
+
+      <KanbanBoard
+        setTasks={setTasks}
+        tasks={tasks}
+        handleSendMessage={handleSendMessage}
       />
     </>
   );
