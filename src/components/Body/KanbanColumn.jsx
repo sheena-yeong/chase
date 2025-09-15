@@ -29,9 +29,10 @@ function KanbanColumn({
   return (
     <div
       ref={drop} // This makes the column a drop zone
-      className="column"
+      className="kanban-column"
     >
-      {title}
+      <p className="column-title">{title}</p>
+      <button className="add-task-btn">+</button>
       {/* FIXED: Map over tasks array and render individual TaskCard components */}
       {tasks.map((task) => (
         <TaskCard

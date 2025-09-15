@@ -3,10 +3,12 @@ import NavBar from "./components/NavBar/NavBar";
 import Body from "./components/Body";
 import KanbanBoard from "./components/Body/KanbanBoard";
 import Chaser from "./components/Chaser";
+import SideBar from "./components/SideBar/SideBar";
+import NewTask from "./components/NewTask";
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  
+
   const handleSendMessage = async (task, description) => {
     const messageFormats = [
       "HONK! This task isn't doing itself:",
@@ -14,8 +16,9 @@ function App() {
       "Goose on patrol: finish this ASAP:",
       "Friendly goose reminder: this task is still waddling behind schedule:",
     ];
-  
-    const randomMessageFormat = messageFormats[Math.floor(Math.random() * messageFormats.length)];
+
+    const randomMessageFormat =
+      messageFormats[Math.floor(Math.random() * messageFormats.length)];
 
     try {
       const res = await fetch("http://localhost:3001/slack/send", {
@@ -28,7 +31,6 @@ function App() {
           text: `🪿 *${randomMessageFormat}*\n• ${task} | ${description}`,
         }),
       });
-      console.log("Sending:", { channel: "C09CQ4J6NLF", text: message });
 
       const data = await res.json();
 
@@ -38,7 +40,7 @@ function App() {
         console.log(`❌ Sending error: ${data.error}`);
       }
     } catch (error) {
-      setStatus(`❌ Sending error: ${error.message}`);
+      console.log(`❌ Sending error: ${error.message}`);
     }
   };
 
@@ -64,22 +66,18 @@ function App() {
 
   return (
     <>
-      <NavBar />
-      {/* <Body
-        channel={channel}
-        message={message}
-        setChannel={setChannel}
-        setMessage={setMessage}
-        handleSendMessage={handleSendMessage}
-        status={status}
-      /> */}
-
+  <NavBar />
+  <div className="app-container">
+    <SideBar />
+    <div className="kanban-board">
       <KanbanBoard
         setTasks={setTasks}
         tasks={tasks}
         handleSendMessage={handleSendMessage}
       />
-    </>
+    </div>
+  </div>
+</>
   );
 }
 

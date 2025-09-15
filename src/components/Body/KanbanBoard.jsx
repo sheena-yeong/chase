@@ -51,7 +51,7 @@ function KanbanBoard({ tasks, setTasks, handleSendMessage }) {
   };
 
   return (
-    <div className="board">
+    <div className="kanban-board">
       <DndProvider backend={HTML5Backend}>
         {columns.map((column, index) => (
           <KanbanColumn

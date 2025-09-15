@@ -21,24 +21,30 @@ function TaskCard({
 
   return (
     <div
-      ref={drag}
-      className="card"
-      style={{
-        opacity: isDragging ? 0.5 : 1,
-        cursor: "move",
-      }}
+  ref={drag}
+  className="task-card"
+  style={{
+    opacity: isDragging ? 0.5 : 1,
+    cursor: "move",
+  }}
+>
+  <div className="task-content">
+    <p className="task-title">{task.fields.Task}</p>
+    <p className="task-deadline">{new Date(task.fields.Deadline).toLocaleDateString("en-GB")}</p>
+  </div>
+
+  {task.fields.Column === "Waiting on others" && (
+    <button
+      className="action-btn"
+      aria-label="Send message"
+      onClick={() =>
+        handleSendMessage(task.fields.Task, task.fields.Description)
+      }
     >
-      <p>{task.fields.Task}</p>
-      {task.fields.Column === "Waiting on others" && (
-        <button
-          className="featherBtn"
-          aria-label="Send message"
-          onClick={() => handleSendMessage(task.fields.Task, task.fields.Description)}
-        >
-          🪿
-        </button>
-      )}
-    </div>
+      🪿
+    </button>
+  )}
+</div>
   );
 }
 
