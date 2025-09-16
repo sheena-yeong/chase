@@ -8,7 +8,6 @@ function KanbanColumn({
   tasks,
   setTasks,
   onMoveTask,
-  handleSendMessage,
   channel,
   message,
   setChannel,
@@ -94,7 +93,6 @@ function KanbanColumn({
         <TaskCard
           key={task.id}
           task={task}
-          handleSendMessage={handleSendMessage}
           channel={channel}
           message={message}
           setChannel={setChannel}

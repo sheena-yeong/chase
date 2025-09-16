@@ -1,10 +1,10 @@
 // import Draggable from "react-draggable"; // react-draggable uses findDOMNode, which has been deprecated in React 18's StrictMode
 import { useDrag } from "react-dnd";
+import { handleSendMessage } from "../../services/tasks";
 
 // Individual draggable card component
 function TaskCard({
   task,
-  handleSendMessage,
   message,
   channel,
   setMessage,

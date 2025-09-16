@@ -3,7 +3,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useState } from "react";
 
-function KanbanBoard({ tasks, setTasks, handleSendMessage }) {
+function KanbanBoard({ tasks, setTasks }) {
   const columns = ["Waiting on others", "Not Started", "In Progress", "Done"];
   const [channel, setChannel] = useState("C09CQ4J6NLF");
   const [message, setMessage] = useState("");
@@ -60,7 +60,6 @@ function KanbanBoard({ tasks, setTasks, handleSendMessage }) {
             title={column}
             tasks={tasks.filter((task) => task.fields.Column === column)}
             onMoveTask={handleMoveTask}
-            handleSendMessage={handleSendMessage}
             channel={channel}
             message={message}
             setChannel={setChannel}
