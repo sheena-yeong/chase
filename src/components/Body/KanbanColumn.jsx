@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { useDrop } from "react-dnd";
 import TaskCard from "./TaskCard";
+import { addTask } from "../../services/tasks";
 
 function KanbanColumn({
   title,
   tasks,
+  setTasks,
   onMoveTask,
   handleSendMessage,
   channel,
@@ -11,6 +14,9 @@ function KanbanColumn({
   setChannel,
   setMessage,
 }) {
+  const [showAddNewTask, setshowAddNewTask] = useState(false);
+  const [newTask, setNewTask] = useState([]);
+
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: "TASK", // Must match the type from TaskCard's useDrag
     drop: (draggedItem) => {
@@ -26,14 +32,64 @@ function KanbanColumn({
     }),
   });
 
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setNewTask((prev) => ({ ...prev, [name]: value }));
+  }
+
+  async function handleSubmit(e, columnTitle) {
+    e.preventDefault();
+    if (!newTask.Task || !newTask.Description || !newTask.Deadline) return
+    const newTaskToSend = {...newTask, Column: columnTitle};
+    const createdTask = await addTask(newTaskToSend)
+    setTasks(prev => [...prev, createdTask]);
+    setshowAddNewTask(false);
+    setNewTask({ Task:"", Description: "", Deadline:"" });
+  }
+
   return (
     <div
       ref={drop} // This makes the column a drop zone
       className="kanban-column"
     >
       <p className="column-title">{title}</p>
-      <button className="add-task-btn">+</button>
-      {/* FIXED: Map over tasks array and render individual TaskCard components */}
+      <button
+        className="add-task-btn"
+        onClick={() => setshowAddNewTask((s) => !s)}
+      >
+        +
+      </button>
+
+      {showAddNewTask && (
+        <div className="task-card add-task-card">
+          <form onSubmit={(e) => handleSubmit(e, title)} className="add-task-form">
+            <input
+              placeholder="Task"
+              name="Task"
+              value={newTask.Task}
+              onChange={handleInputChange}
+            />
+            <input
+              placeholder="Description"
+              name="Description"
+              value={newTask.Description}
+              onChange={handleInputChange}
+            />
+            <input
+              placeholder="Deadline"
+              type="date"
+              name="Deadline"
+              value={newTask.Deadline}
+              onChange={handleInputChange}
+            />
+            <div className="add-task-actions">
+              <button>Add</button>
+              <button onClick={() => setshowAddNewTask(false)}>Cancel</button>
+            </div>
+          </form>
+        </div>
+      )}
+
       {tasks.map((task) => (
         <TaskCard
           key={task.id}

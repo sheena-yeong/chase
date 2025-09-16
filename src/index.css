@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -71,23 +73,17 @@ button:focus-visible {
   height: 70px; /* Fixed height for navbar */
 }
 
-.navBar img {
-  padding: 10px;
-  border-radius: 30px;
-  height: 50px;
-}
-
 .app-container {
   display: flex;
   height: calc(100vh - 70px); /* Full height minus navbar height */
 }
 
-.sideBar {
+/* .sideBar {
   background-color: #4775ff;
   width: 300px;
   min-width: 300px;
   flex-shrink: 0;
-}
+} */
 
 .kanban-board {
   display: flex;
@@ -187,4 +183,32 @@ button:focus-visible {
   color: #de8808;
   font-weight: bold;
   font-size: 20px;
+}
+
+.add-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-task-form input,
+.add-task-form textarea {
+  border: 1px solid #e1e8ed;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 0.95rem;
+}
+
+.add-task-card {
+  background: #fbfdff;
+  border: 1px dashed #d0d7de;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.add-task-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
 }

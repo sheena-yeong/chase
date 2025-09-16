@@ -66,18 +66,20 @@ function App() {
 
   return (
     <>
-  <NavBar />
-  <div className="app-container">
-    <SideBar />
-    <div className="kanban-board">
-      <KanbanBoard
-        setTasks={setTasks}
-        tasks={tasks}
-        handleSendMessage={handleSendMessage}
-      />
-    </div>
-  </div>
-</>
+      <div className="font-[Avenir]">
+        <NavBar />
+        <div className="app-container">
+          <SideBar />
+          <div className="kanban-board">
+            <KanbanBoard
+              setTasks={setTasks}
+              tasks={tasks}
+              handleSendMessage={handleSendMessage}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

@@ -4,7 +4,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { useState } from "react";
 
 function KanbanBoard({ tasks, setTasks, handleSendMessage }) {
-  const columns = ["Waiting on others", "Backlog", "In Progress", "Done"];
+  const columns = ["Waiting on others", "Not Started", "In Progress", "Done"];
   const [channel, setChannel] = useState("C09CQ4J6NLF");
   const [message, setMessage] = useState("");
 
