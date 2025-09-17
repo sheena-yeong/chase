@@ -53,3 +53,24 @@ export const addTask = async (newTask) => {
     console.log(`❌ Task Adding: ${error.message}`);
   }
 };
+
+export const deleteTask = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3001/airtable/tasks/${id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      // Backend may not return JSON; just return the deleted ID
+      console.log("✅ Task deleted successfully!");
+      return { id };
+    } else {
+      // Attempt to read response as text (fallback if it's HTML)
+      const text = await res.text();
+      console.log(`❌ Task Deletion error: ${text}`);
+      return null;
+    }
+  } catch (error) {
+    console.log(`❌ Task Deletion: ${error.message}`);
+    return null;
+  }
+};

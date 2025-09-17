@@ -93,6 +93,7 @@ function KanbanColumn({
         <TaskCard
           key={task.id}
           task={task}
+          setTasks={setTasks}
           channel={channel}
           message={message}
           setChannel={setChannel}
