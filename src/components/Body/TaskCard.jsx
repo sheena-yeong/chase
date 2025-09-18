@@ -96,7 +96,7 @@ function TaskCard({
               Task:{" "}
               <input
                 value={title}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => setTitle(e.target.value)}
                 className="w-full rounded border p-2"
               />
             </label>

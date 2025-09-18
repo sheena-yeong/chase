@@ -71,7 +71,7 @@ function KanbanColumn({
               value={newTask.Task}
               onChange={handleInputChange}
             />
-            <input
+            <textarea
               placeholder="Description"
               name="Description"
               value={newTask.Description}

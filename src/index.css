@@ -158,7 +158,7 @@ button:focus-visible {
 }
 
 .add-task-btn:hover {
-  background-color: #ededed;
+  background-color: rgb(255, 249, 214);
 }
 
 .column-title {
