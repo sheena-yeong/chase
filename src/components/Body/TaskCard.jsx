@@ -1,8 +1,9 @@
 // import Draggable from "react-draggable"; // react-draggable uses findDOMNode, which has been deprecated in React 18's StrictMode
 import { useState } from "react";
 import { useDrag } from "react-dnd";
-import { handleSendMessage } from "../../services/tasks";
+import { handleSendMessage, handleUpdateTask } from "../../services/tasks";
 import { deleteTask } from "../../services/tasks";
+import { FaEdit } from "react-icons/fa";
 import {
   Description,
   Dialog,
@@ -12,7 +13,15 @@ import {
 } from "@headlessui/react";
 
 // Individual draggable card component
-function TaskCard({ task, setTasks, message, channel, setMessage, setChannel }) {
+function TaskCard({
+  tasks,
+  task,
+  setTasks,
+  message,
+  channel,
+  setMessage,
+  setChannel,
+}) {
   const [{ isDragging }, drag] = useDrag({
     // returns a "drag ref" functino that you attach to the element you want draggable
     type: "TASK", // A category that i define. useDrop must accept 'TASK' for the drop to work
@@ -23,24 +32,27 @@ function TaskCard({ task, setTasks, message, channel, setMessage, setChannel }) 
   });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [title, setTitle] = useState(task.fields.Task);
+  const [deadline, setDeadline] = useState(task.fields.Deadline);
+  const [description, setDescription] = useState(task.fields.Description);
 
   async function handleDelete(e, taskId) {
     e.preventDefault();
     console.log(taskId);
-
     try {
-      // call your delete API
       await deleteTask(taskId);
-
-      // remove it from state
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
-
-      // close modal
       setIsOpen(false);
     } catch (error) {
       console.error("Failed to delete task:", error);
     }
   }
+
+    function handleUpdate(e) {
+      if (!title || !description || !deadline) return
+      handleUpdateTask(tasks, setTasks, task.id, title, deadline, description)
+      setIsOpen(false);
+    }
 
   return (
     <div
@@ -71,6 +83,7 @@ function TaskCard({ task, setTasks, message, channel, setMessage, setChannel }) 
           🪿
         </button>
       )}
+
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
@@ -79,17 +92,35 @@ function TaskCard({ task, setTasks, message, channel, setMessage, setChannel }) 
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
           <DialogPanel className="max-w-lg space-y-4 bg-white p-12 rounded-xl min-w-100">
-            <DialogTitle className="font-bold">{task.fields.Task}</DialogTitle>
-            <Description>
-              Due by:{" "}
-              {new Date(task.fields.Deadline).toLocaleDateString("en-GB")}
-            </Description>
-            <Description>Description: {task.fields.Description}</Description>
+            <label>
+              Task:{" "}
+              <input
+                value={title}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full rounded border p-2"
+              />
+            </label>
+            <label>
+              Deadline
+              <input
+                type="date"
+                value={deadline?.slice(0, 10)} // Airtable returns ISO string
+                onChange={(e) => setDeadline(e.target.value)}
+                className="w-full rounded border p-2"
+              />
+            </label>
+            <label>
+              Description:{" "}
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full rounded border p-2"
+              />
+            </label>
             <div className="flex gap-4">
               <button onClick={() => setIsOpen(false)}>Cancel</button>
-              <button onClick={(e) => handleDelete(e, task.id)}>
-                Delete
-              </button>
+              <button onClick={handleUpdate}>Update</button>
+              <button onClick={(e) => handleDelete(e, task.id)}>Delete</button>
             </div>
           </DialogPanel>
         </div>

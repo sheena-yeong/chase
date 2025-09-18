@@ -2,53 +2,12 @@ import KanbanColumn from "./KanbanColumn";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useState } from "react";
+import { handleMoveTask } from "../../services/tasks";
 
 function KanbanBoard({ tasks, setTasks }) {
   const columns = ["Waiting on others", "Not Started", "In Progress", "Done"];
   const [channel, setChannel] = useState("C09CQ4J6NLF");
   const [message, setMessage] = useState("");
-
-  const handleMoveTask = async (taskId, newColumn) => {
-    const originalTasks = [...tasks];
-
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId
-          ? { ...task, fields: { ...task.fields, Column: newColumn } }
-          : task
-      )
-    );
-    try {
-      const res = await fetch(
-        `http://localhost:3001/airtable/tasks/${taskId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            Column: newColumn,
-          }),
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error(
-          `Failed to update task: ${res.status} ${res.statusText}`
-        );
-      }
-      const updatedRecord = await res.json();
-      console.log("Task updated successfully", updatedRecord);
-
-      setTasks((prevTasks) =>
-        prevTasks.map((task) => (task.id === taskId ? updatedRecord : task))
-      );
-    } catch (error) {
-      console.error("Failed to update task:", error);
-
-      setTasks(originalTasks);
-    }
-  };
 
   return (
     <div className="kanban-board">

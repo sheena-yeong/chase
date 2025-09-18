@@ -22,7 +22,7 @@ function KanbanColumn({
       // draggedItem contains { id: task.id, task: taskObject }
 
       if (draggedItem.task.fields.Column !== title) {
-        onMoveTask(draggedItem.id, title);
+        onMoveTask(tasks, setTasks, draggedItem.id, title);
       }
     },
     collect: (monitor) => ({
@@ -38,12 +38,12 @@ function KanbanColumn({
 
   async function handleSubmit(e, columnTitle) {
     e.preventDefault();
-    if (!newTask.Task || !newTask.Description || !newTask.Deadline) return
-    const newTaskToSend = {...newTask, Column: columnTitle};
-    const createdTask = await addTask(newTaskToSend)
-    setTasks(prev => [...prev, createdTask]);
+    if (!newTask.Task || !newTask.Description || !newTask.Deadline) return;
+    const newTaskToSend = { ...newTask, Column: columnTitle };
+    const createdTask = await addTask(newTaskToSend);
+    setTasks((prev) => [...prev, createdTask]);
     setshowAddNewTask(false);
-    setNewTask({ Task:"", Description: "", Deadline:"" });
+    setNewTask({ Task: "", Description: "", Deadline: "" });
   }
 
   return (
@@ -61,7 +61,10 @@ function KanbanColumn({
 
       {showAddNewTask && (
         <div className="task-card add-task-card">
-          <form onSubmit={(e) => handleSubmit(e, title)} className="add-task-form">
+          <form
+            onSubmit={(e) => handleSubmit(e, title)}
+            className="add-task-form"
+          >
             <input
               placeholder="Task"
               name="Task"
@@ -91,6 +94,7 @@ function KanbanColumn({
 
       {tasks.map((task) => (
         <TaskCard
+          tasks={tasks}
           key={task.id}
           task={task}
           setTasks={setTasks}

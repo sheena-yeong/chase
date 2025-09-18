@@ -74,3 +74,77 @@ export const deleteTask = async (id) => {
     return null;
   }
 };
+
+export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
+  const originalTasks = [...tasks];
+
+  setTasks((prevTasks) =>
+    prevTasks.map((task) =>
+      task.id === taskId
+        ? { ...task, fields: { ...task.fields, Column: newColumn } }
+        : task
+    )
+  );
+  try {
+    const res = await fetch(`http://localhost:3001/airtable/tasks/${taskId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fields: { Column: newColumn },
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to update task: ${res.status} ${res.statusText}`);
+    }
+    const updatedRecord = await res.json();
+    console.log("Task updated successfully", updatedRecord);
+
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === taskId ? updatedRecord : task))
+    );
+  } catch (error) {
+    console.error("Failed to update task:", error);
+
+    setTasks(originalTasks);
+  }
+};
+
+export const handleUpdateTask = async (tasks, setTasks, taskId, newTask, newDeadline, newDescription) => {
+  const originalTasks = [...tasks];
+
+  setTasks((prevTasks) =>
+    prevTasks.map((task) =>
+      task.id === taskId
+        ? { ...task, fields: { ...task.fields, Task: newTask, Deadline: newDeadline, Description: newDescription } }
+        : task
+    )
+  );
+  try {
+    const res = await fetch(`http://localhost:3001/airtable/tasks/${taskId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fields: { Task: newTask, Deadline: newDeadline, Description: newDescription },
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to update task: ${res.status} ${res.statusText}`);
+    }
+    const updatedRecord = await res.json();
+    console.log("Task updated successfully", updatedRecord);
+
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === taskId ? updatedRecord : task))
+    );
+  } catch (error) {
+    console.error("Failed to update task:", error);
+
+    setTasks(originalTasks);
+  }
+};
