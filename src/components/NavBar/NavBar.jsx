@@ -18,12 +18,12 @@ function NavBar() {
         Board
       </NavLink>
       <NavLink
-        to="/workspace"
+        to="/users"
         className={({ isActive }) =>
           `${baseClass} ${isActive ? activeClass : inactiveClass}`
         }
       >
-        Workspace
+        Slack Directory
       </NavLink>
     </div>
   );

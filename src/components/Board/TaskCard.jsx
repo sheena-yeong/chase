@@ -1,9 +1,9 @@
 // import Draggable from "react-draggable"; // react-draggable uses findDOMNode, which has been deprecated in React 18's StrictMode
 import { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
-import { handleSendMessage, handleUpdateTask } from "../../services/tasks";
-import { deleteTask } from "../../services/tasks";
-import { FaEdit } from "react-icons/fa";
+import { handleSendMessage, handleUpdateTask } from "../../services/services";
+import { deleteTask } from "../../services/services";
+import { FaTrashAlt, FaCheckCircle } from "react-icons/fa";
 import {
   Description,
   Dialog,
@@ -142,14 +142,14 @@ function TaskCard({
               />
             </label>
             <div className="flex gap-4 justify-end">
-              <button onClick={handleUpdate} className="bg-orange-300">
-                Update
+              <button onClick={handleUpdate} className="bg-green-200">
+                < FaCheckCircle />
               </button>
               <button
                 onClick={(e) => handleDelete(e, task.id)}
                 className="bg-red-200"
               >
-                Delete
+                <FaTrashAlt />
               </button>
             </div>
           </DialogPanel>

@@ -2,7 +2,7 @@ import KanbanColumn from "./KanbanColumn";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useState } from "react";
-import { handleMoveTask } from "../../services/tasks";
+import { handleMoveTask } from "../../services/services";
 
 function KanbanBoard({ tasks, setTasks, loadTasks }) {
   const columns = ["Waiting on others", "Not Started", "In Progress", "Done"];

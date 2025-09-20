@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import HeaderBar from "./components/HeaderBar/HeaderBar";
-import KanbanBoard from "./components/Body/KanbanBoard";
+import KanbanBoard from "./components/Board/KanbanBoard";
 import NavBar from "./components/NavBar/NavBar";
-import { fetchTasks } from "./services/tasks";
+import Users from "./components/SlackDirectory/users";
+import { fetchTasks } from "./services/services";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -42,6 +43,7 @@ function App() {
             </div>
           }
         />
+        <Route path="/users" element={<Users />}></Route>
       </Routes>
     </>
   );

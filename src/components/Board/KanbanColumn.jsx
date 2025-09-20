@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDrop } from "react-dnd";
 import TaskCard from "./TaskCard";
-import { addTask } from "../../services/tasks";
+import { addTask } from "../../services/services";
 
 function KanbanColumn({
   title,
@@ -87,7 +87,15 @@ function KanbanColumn({
             />
             <div className="add-task-actions">
               <button className="bg-orange-300">Add</button>
-              <button className="bg-orange-300" onClick={() => setshowAddNewTask(false)}>Cancel</button>
+              <button
+                className="bg-orange-300"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setshowAddNewTask(false);
+                }}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>

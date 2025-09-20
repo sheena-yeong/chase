@@ -1,3 +1,5 @@
+/* Slack fetches */
+
 export const handleSendMessage = async (task, description) => {
   const messageFormats = [
     "HONK! This task isn't doing itself:",
@@ -33,13 +35,25 @@ export const handleSendMessage = async (task, description) => {
   }
 };
 
+export const fetchSlackUsers = async () => {
+  try {
+    const res = await fetch("http://localhost:3001/slack/users");
+    if (!res.ok) {
+      throw new Error("Failed to fetch Slack users");
+    }
+    return await res.json();
+  } catch (error) {
+    console.log("Error fetching users from proxy", error.message);
+  }
+};
+
 /* Airtable fetches */
 
 export const fetchTasks = async () => {
-  const res = await fetch("http://localhost:3001/airtable/tasks")
+  const res = await fetch("http://localhost:3001/airtable/tasks");
   if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
   return res.json();
-}
+};
 
 export const addTask = async (newTask) => {
   try {
