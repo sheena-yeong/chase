@@ -1,5 +1,5 @@
 // import Draggable from "react-draggable"; // react-draggable uses findDOMNode, which has been deprecated in React 18's StrictMode
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { handleSendMessage, handleUpdateTask } from "../../services/tasks";
 import { deleteTask } from "../../services/tasks";
@@ -17,6 +17,7 @@ function TaskCard({
   tasks,
   task,
   setTasks,
+  loadTasks,
   message,
   channel,
   setMessage,
@@ -48,11 +49,23 @@ function TaskCard({
     }
   }
 
-    function handleUpdate(e) {
-      if (!title || !description || !deadline) return
-      handleUpdateTask(tasks, setTasks, task.id, title, deadline, description)
-      setIsOpen(false);
-    }
+  function handleUpdate(e) {
+    if (!title || !description || !deadline) return;
+    handleUpdateTask(tasks, setTasks, task.id, title, deadline, description);
+    setIsOpen(false);
+  }
+
+  const resetFormData = () => {
+    setTitle(task.fields.Task);
+    setDeadline(task.fields.Deadline);
+    setDescription(task.fields.Description);
+  };
+
+  useEffect(() => {
+    setTitle(task.fields.Task);
+    setDeadline(task.fields.Deadline);
+    setDescription(task.fields.Description);
+  }, [task]);
 
   return (
     <div
@@ -86,27 +99,38 @@ function TaskCard({
 
       <Dialog
         open={isOpen}
-        onClose={() => setIsOpen(false)}
+        onClose={() => {
+          resetFormData();
+          setIsOpen(false);
+        }}
         className="relative z-50"
       >
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
           <DialogPanel className="max-w-lg space-y-4 bg-white p-12 rounded-xl min-w-100">
-            <label>
-              Task:{" "}
-              <input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded border p-2"
-              />
-            </label>
+            <div className="relative">
+              <label>
+                Task:{" "}
+                <input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full rounded border p-2"
+                />
+              </label>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-xl absolute left-101 bottom-10 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                ×
+              </button>
+            </div>
             <label>
               Deadline
               <input
                 type="date"
                 value={deadline?.slice(0, 10)} // Airtable returns ISO string
                 onChange={(e) => setDeadline(e.target.value)}
-                className="w-full rounded border p-2"
+                className="w-full rounded border p-2 mb-4"
               />
             </label>
             <label>
@@ -117,10 +141,16 @@ function TaskCard({
                 className="w-full rounded border p-2"
               />
             </label>
-            <div className="flex gap-4">
-              <button onClick={() => setIsOpen(false)}>Cancel</button>
-              <button onClick={handleUpdate}>Update</button>
-              <button onClick={(e) => handleDelete(e, task.id)}>Delete</button>
+            <div className="flex gap-4 justify-end">
+              <button onClick={handleUpdate} className="bg-orange-300">
+                Update
+              </button>
+              <button
+                onClick={(e) => handleDelete(e, task.id)}
+                className="bg-red-200"
+              >
+                Delete
+              </button>
             </div>
           </DialogPanel>
         </div>

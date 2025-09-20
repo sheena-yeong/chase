@@ -1,14 +1,31 @@
-import logo from "../../assets/chase_logo.png";
+import { NavLink } from "react-router-dom";
 
 function NavBar() {
-  return (
-    <>
-      <div className="flex items-center text-white bg-[#4775ff] px-[15px] h-[70px]">
-        <img src={logo} className="w-13 h-13 m-2 rounded-2xl" />
+  const baseClass =
+    "px-4 py-2 text-sm font-medium rounded-t-lg transition-colors";
+  const activeClass = "bg-white text-black";
+  const inactiveClass = "text-black hover:bg-[#fff9d6]";
 
-        <h2 className="text-4xl font-bold m-2">Chase</h2>
-      </div>
-    </>
+  return (
+    <div className="flex gap-1 bg-[#e8f2ff] pt-3 pl-3">
+      <NavLink
+        to="/"
+        end
+        className={({ isActive }) =>
+          `${baseClass} ${isActive ? activeClass : inactiveClass}`
+        }
+      >
+        Board
+      </NavLink>
+      <NavLink
+        to="/workspace"
+        className={({ isActive }) =>
+          `${baseClass} ${isActive ? activeClass : inactiveClass}`
+        }
+      >
+        Workspace
+      </NavLink>
+    </div>
   );
 }
 

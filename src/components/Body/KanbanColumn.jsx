@@ -8,6 +8,7 @@ function KanbanColumn({
   tasks,
   setTasks,
   onMoveTask,
+  loadTasks,
   channel,
   message,
   setChannel,
@@ -85,8 +86,8 @@ function KanbanColumn({
               onChange={handleInputChange}
             />
             <div className="add-task-actions">
-              <button>Add</button>
-              <button onClick={() => setshowAddNewTask(false)}>Cancel</button>
+              <button className="bg-orange-300">Add</button>
+              <button className="bg-orange-300" onClick={() => setshowAddNewTask(false)}>Cancel</button>
             </div>
           </form>
         </div>
@@ -102,6 +103,7 @@ function KanbanColumn({
           message={message}
           setChannel={setChannel}
           setMessage={setMessage}
+          loadTasks={loadTasks}
         />
       ))}
 

@@ -33,6 +33,14 @@ export const handleSendMessage = async (task, description) => {
   }
 };
 
+/* Airtable fetches */
+
+export const fetchTasks = async () => {
+  const res = await fetch("http://localhost:3001/airtable/tasks")
+  if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
+  return res.json();
+}
+
 export const addTask = async (newTask) => {
   try {
     const res = await fetch("http://localhost:3001/airtable/tasks", {
@@ -112,13 +120,28 @@ export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
   }
 };
 
-export const handleUpdateTask = async (tasks, setTasks, taskId, newTask, newDeadline, newDescription) => {
+export const handleUpdateTask = async (
+  tasks,
+  setTasks,
+  taskId,
+  newTask,
+  newDeadline,
+  newDescription
+) => {
   const originalTasks = [...tasks];
 
   setTasks((prevTasks) =>
     prevTasks.map((task) =>
       task.id === taskId
-        ? { ...task, fields: { ...task.fields, Task: newTask, Deadline: newDeadline, Description: newDescription } }
+        ? {
+            ...task,
+            fields: {
+              ...task.fields,
+              Task: newTask,
+              Deadline: newDeadline,
+              Description: newDescription,
+            },
+          }
         : task
     )
   );
@@ -129,7 +152,11 @@ export const handleUpdateTask = async (tasks, setTasks, taskId, newTask, newDead
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        fields: { Task: newTask, Deadline: newDeadline, Description: newDescription },
+        fields: {
+          Task: newTask,
+          Deadline: newDeadline,
+          Description: newDescription,
+        },
       }),
     });
 
@@ -146,5 +173,19 @@ export const handleUpdateTask = async (tasks, setTasks, taskId, newTask, newDead
     console.error("Failed to update task:", error);
 
     setTasks(originalTasks);
+  }
+};
+
+export const handleOnClose = async (setTasks) => {
+  console.log("Closing the task");
+  try {
+    const res = await fetch("http://localhost:3001/airtable/tasks");
+
+    if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
+
+    const data = await res.json();
+    setTasks(data);
+  } catch (error) {
+    console.log(`❌ error: ${error.message}`);
   }
 };
