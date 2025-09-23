@@ -140,7 +140,8 @@ export const handleUpdateTask = async (
   taskId,
   newTask,
   newDeadline,
-  newDescription
+  newDescription,
+  newAssignee
 ) => {
   const originalTasks = [...tasks];
 
@@ -154,6 +155,7 @@ export const handleUpdateTask = async (
               Task: newTask,
               Deadline: newDeadline,
               Description: newDescription,
+              Assignee: newAssignee,
             },
           }
         : task
@@ -170,6 +172,7 @@ export const handleUpdateTask = async (
           Task: newTask,
           Deadline: newDeadline,
           Description: newDescription,
+          Assignee: newAssignee,
         },
       }),
     });

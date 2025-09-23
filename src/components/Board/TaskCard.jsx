@@ -53,7 +53,7 @@ function TaskCard({
 
   function handleUpdate(e) {
     if (!title || !description || !deadline) return;
-    handleUpdateTask(tasks, setTasks, task.id, title, deadline, description);
+    handleUpdateTask(tasks, setTasks, task.id, title, deadline, description, assignee);
     setIsOpen(false);
   }
 
@@ -153,8 +153,8 @@ function TaskCard({
                 onChange={(e) => setAssignee(e.target.value)}
                 className="w-full rounded border p-2"
               >
-                {users.map((user) => (
-                  <option>{user.name}</option>
+                {users.filter(user => !user.is_bot && !user.deleted && user.id !== "USLACKBOT").map((user) => (
+                  <option value={user.real_name}>{user.real_name}</option>
                 ))}
               </select>
             </label>
