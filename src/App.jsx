@@ -4,10 +4,11 @@ import HeaderBar from "./components/HeaderBar/HeaderBar";
 import KanbanBoard from "./components/Board/KanbanBoard";
 import NavBar from "./components/NavBar/NavBar";
 import Users from "./components/SlackDirectory/users";
-import { fetchTasks } from "./services/services";
+import { fetchTasks, fetchSlackUsers } from "./services/services";
 
 function App() {
   const [tasks, setTasks] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const loadTasks = async () => {
     try {
@@ -18,8 +19,19 @@ function App() {
     }
   };
 
+  const loadUsers = async () => {
+    try {
+      const data = await fetchSlackUsers();
+      setUsers(data.members);
+      console.log("Fetched users:", data);
+    } catch (error) {
+      console.error("Failed to load Slack users:", error);
+    }
+  }
+
   useEffect(() => {
     loadTasks();
+    loadUsers();
   }, []);
 
   return (
@@ -37,13 +49,14 @@ function App() {
                     setTasks={setTasks}
                     tasks={tasks}
                     loadTasks={loadTasks}
+                    users={users}
                   />
                 </div>
               </div>
             </div>
           }
         />
-        <Route path="/users" element={<Users />}></Route>
+        <Route path="/users" element={<Users users={users} />}></Route>
       </Routes>
     </>
   );

@@ -22,6 +22,7 @@ function TaskCard({
   channel,
   setMessage,
   setChannel,
+  users,
 }) {
   const [{ isDragging }, drag] = useDrag({
     // returns a "drag ref" functino that you attach to the element you want draggable
@@ -36,6 +37,7 @@ function TaskCard({
   const [title, setTitle] = useState(task.fields.Task);
   const [deadline, setDeadline] = useState(task.fields.Deadline);
   const [description, setDescription] = useState(task.fields.Description);
+  const [assignee, setAssignee] = useState(task.fields.Assignee);
 
   async function handleDelete(e, taskId) {
     e.preventDefault();
@@ -80,8 +82,11 @@ function TaskCard({
       <div className="flex flex-col">
         <p className="font-semibold m-0">{task.fields.Task}</p>
         <p className="text-sm text-gray-600 mt-1 mb-0">
-          {new Date(task.fields.Deadline).toLocaleDateString("en-GB")}
+          Due: {new Date(task.fields.Deadline).toLocaleDateString("en-GB")}
         </p>
+          {task.fields.Column === "Waiting on others" && (
+            <p className="text-sm text-gray-600 mt-1 mb-0">Waiting on: {task.fields.Assignee}</p>
+          )}
       </div>
 
       {task.fields.Column === "Waiting on others" && (
@@ -110,7 +115,7 @@ function TaskCard({
           <DialogPanel className="max-w-lg space-y-4 bg-white p-12 rounded-xl min-w-100">
             <div className="relative">
               <label>
-                Task:{" "}
+                Task:
                 <input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -141,9 +146,21 @@ function TaskCard({
                 className="w-full rounded border p-2"
               />
             </label>
+            <label>
+              Assignee:{" "}
+              <select
+                value={assignee}
+                onChange={(e) => setAssignee(e.target.value)}
+                className="w-full rounded border p-2"
+              >
+                {users.map((user) => (
+                  <option>{user.name}</option>
+                ))}
+              </select>
+            </label>
             <div className="flex gap-4 justify-end">
               <button onClick={handleUpdate} className="bg-green-200">
-                < FaCheckCircle />
+                <FaCheckCircle />
               </button>
               <button
                 onClick={(e) => handleDelete(e, task.id)}

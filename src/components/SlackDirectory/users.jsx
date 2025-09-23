@@ -1,45 +1,21 @@
-import { fetchSlackUsers } from "../../services/services";
 import { useState, useEffect } from "react";
 
-function users() {
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+function Users({users}) {
+  const [filteredUsers, setFilteredUsers] = useState(users);
 
-  useEffect(() => {
-    async function loadUsers() {
-      try {
-        const data = await fetchSlackUsers();
-        setUsers(data);
-        setFilteredUsers(data);
-        console.log("Fetched users:", data);
-      } catch (error) {
-        console.error("Failed to load Slack users:", error);
-      }
-    }
-
-    loadUsers();
-  }, []);
-
-  function handleSearch(searchQuery) {
-    if (!searchQuery.trim()) {
-      setFilteredUsers(users);
-    } else {
-      const filtered = {
-        ...users,
-        members: users.members?.filter(
-          (user) =>
-            user.real_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.name?.toLowerCase().includes(searchQuery.toLowerCase())
-        ),
-      };
-      setFilteredUsers(filtered);
-    }
+  function handleSearch(query) {
+    setFilteredUsers(
+      users.filter((user) =>
+        (user.real_name || user.name)
+          ?.toLowerCase()
+          .includes(query.toLowerCase())
+      )
+    );
   }
 
   return (
     <>
-      {!users ? (
+      {users.length === 0 ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
           <span className="ml-3 text-gray-600">Loading users...</span>
@@ -49,41 +25,39 @@ function users() {
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-800">Slack Users</h2>
             <p className="text-sm text-gray-600 mt-1">
-              {filteredUsers.members?.length || 0} users found
+              {filteredUsers.length} users found
             </p>
             <input
               placeholder="Search for a user"
               type="search"
-              onChange={(e) => {
-                handleSearch(e.target.value);
-              }}
+              onChange={(e) => handleSearch(e.target.value)}
               className="border border-[#e1e8ed] my-2 rounded-full w-full p-2 text-[0.95rem]"
-            ></input>
+            />
           </div>
 
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full table-fixed divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     User ID
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="w-1/2 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Email
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredUsers.members
-                  ?.filter((user) => !user.deleted)
+                {filteredUsers
+                  .filter((user) => !user.deleted)
                   .map((user, index) => (
                     <tr
-                      key={user.id}
+                      key={index}
                       className={`hover:bg-gray-50 transition-colors ${
-                        index % 2 === 0 ? "bg-white" : "bg-gray-25"
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
                       }`}
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-500">
@@ -124,7 +98,7 @@ function users() {
             </table>
           </div>
 
-          {users.members?.length === 0 && (
+          {filteredUsers.length === 0 && (
             <div className="text-center py-8">
               <p className="text-gray-500">No users found</p>
             </div>
@@ -135,4 +109,4 @@ function users() {
   );
 }
 
-export default users;
+export default Users;

@@ -13,6 +13,7 @@ function KanbanColumn({
   message,
   setChannel,
   setMessage,
+  users,
 }) {
   const [showAddNewTask, setshowAddNewTask] = useState(false);
   const [newTask, setNewTask] = useState([]);
@@ -117,6 +118,7 @@ function KanbanColumn({
           setChannel={setChannel}
           setMessage={setMessage}
           loadTasks={loadTasks}
+          users={users}
         />
       ))}
 
