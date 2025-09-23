@@ -31,8 +31,8 @@ function App() {
           path="/"
           element={
             <div className="font-[Avenir]">
-              <div className="app-container">
-                <div className="kanban-board">
+              <div className="flex h-[calc(100vh-70px)]">
+                <div className="flex flex-1 gap-[15px] p-[15px] overflow-x-auto">
                   <KanbanBoard
                     setTasks={setTasks}
                     tasks={tasks}

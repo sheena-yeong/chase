@@ -10,7 +10,7 @@ function KanbanBoard({ tasks, setTasks, loadTasks }) {
   const [message, setMessage] = useState("");
 
   return (
-    <div className="kanban-board">
+    <div className="flex flex-1 gap-[15px] p-[15px] overflow-x-auto">
       <DndProvider backend={HTML5Backend}>
         {columns.map((column, index) => (
           <KanbanColumn

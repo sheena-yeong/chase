@@ -49,33 +49,37 @@ function KanbanColumn({
 
   return (
     <div
-      ref={drop} // This makes the column a drop zone
-      className="kanban-column"
+      ref={drop}
+      className="bg-[#e8f2ff] text-[#333] rounded-[10px] h-[95%] flex-1 min-w-[280px] p-[15px] border border-[#d0d7de] flex flex-col gap-[10px] overflow-y-auto"
     >
-      <p className="column-title">{title}</p>
-      <button
-        className="add-task-btn"
-        onClick={() => setshowAddNewTask((s) => !s)}
-      >
-        +
-      </button>
+      <div className="flex items-center justify-between">
+        <p className="text-[#ff9c0b] m-0 font-semibold text-[20px]">{title}</p>
+        <button
+          className="bg-transparent border border-dashed px-2"
+          onClick={() => setshowAddNewTask((s) => !s)}
+        >
+          +
+        </button>
+      </div>
 
       {showAddNewTask && (
-        <div className="task-card add-task-card">
+        <div className="bg-white rounded-lg p-3 mb-2 shadow-sm border border-[#e1e8ed] flex justify-between items-start transition duration-200 ease-in-out hover:shadow-md hover:-translate-y-[1px] cursor-pointer add-task-card">
           <form
             onSubmit={(e) => handleSubmit(e, title)}
-            className="add-task-form"
+            className="flex flex-col gap-2 "
           >
             <input
               placeholder="Task"
               name="Task"
               value={newTask.Task}
+              className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
             />
             <textarea
               placeholder="Description"
               name="Description"
               value={newTask.Description}
+              className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
             />
             <input
@@ -83,9 +87,10 @@ function KanbanColumn({
               type="date"
               name="Deadline"
               value={newTask.Deadline}
+              className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
             />
-            <div className="add-task-actions">
+            <div className="flex gap-2 justify-end">
               <button className="bg-orange-300">Add</button>
               <button
                 className="bg-orange-300"

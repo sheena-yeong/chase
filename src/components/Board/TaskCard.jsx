@@ -70,23 +70,23 @@ function TaskCard({
   return (
     <div
       ref={drag}
-      className="task-card"
+      className="bg-white rounded-lg p-3 mb-2 shadow-sm border border-[#e1e8ed] flex justify-between items-start transition duration-200 ease-in-out hover:shadow-md hover:-translate-y-[1px] cursor-pointer"
       style={{
         opacity: isDragging ? 0.5 : 1,
         cursor: "move",
       }}
       onClick={() => setIsOpen(true)}
     >
-      <div className="task-content">
-        <p className="task-title">{task.fields.Task}</p>
-        <p className="task-deadline">
+      <div className="flex flex-col">
+        <p className="font-semibold m-0">{task.fields.Task}</p>
+        <p className="text-sm text-gray-600 mt-1 mb-0">
           {new Date(task.fields.Deadline).toLocaleDateString("en-GB")}
         </p>
       </div>
 
       {task.fields.Column === "Waiting on others" && (
         <button
-          className="action-btn"
+          className="bg-[#e7edff] text-white rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 hover:bg-[#3461e6] active:translate-y-[1px]"
           aria-label="Send message"
           onClick={(e) => {
             e.stopPropagation();

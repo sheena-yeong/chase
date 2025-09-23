@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 
 function users() {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     async function loadUsers() {
       try {
         const data = await fetchSlackUsers();
         setUsers(data);
+        setFilteredUsers(data);
         console.log("Fetched users:", data);
       } catch (error) {
         console.error("Failed to load Slack users:", error);
@@ -17,6 +20,22 @@ function users() {
 
     loadUsers();
   }, []);
+
+  function handleSearch(searchQuery) {
+    if (!searchQuery.trim()) {
+      setFilteredUsers(users);
+    } else {
+      const filtered = {
+        ...users,
+        members: users.members?.filter(
+          (user) =>
+            user.real_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            user.name?.toLowerCase().includes(searchQuery.toLowerCase())
+        ),
+      };
+      setFilteredUsers(filtered);
+    }
+  }
 
   return (
     <>
@@ -30,8 +49,16 @@ function users() {
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-800">Slack Users</h2>
             <p className="text-sm text-gray-600 mt-1">
-              {users.members?.length || 0} users found
+              {filteredUsers.members?.length || 0} users found
             </p>
+            <input
+              placeholder="Search for a user"
+              type="search"
+              onChange={(e) => {
+                handleSearch(e.target.value);
+              }}
+              className="border border-[#e1e8ed] my-2 rounded-full w-full p-2 text-[0.95rem]"
+            ></input>
           </div>
 
           <div className="overflow-x-auto">
@@ -50,7 +77,7 @@ function users() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {users.members
+                {filteredUsers.members
                   ?.filter((user) => !user.deleted)
                   .map((user, index) => (
                     <tr
