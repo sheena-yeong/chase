@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function Users({users}) {
+function Users({ users }) {
   const [filteredUsers, setFilteredUsers] = useState(users);
 
   function handleSearch(query) {
@@ -48,6 +48,9 @@ function Users({users}) {
                   <th className="w-1/2 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Email
                   </th>
+                  <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Chase
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -91,6 +94,9 @@ function Users({users}) {
                         {user.profile?.email || (
                           <span className="text-gray-400 italic">No email</span>
                         )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <button>🪿</button>
                       </td>
                     </tr>
                   ))}

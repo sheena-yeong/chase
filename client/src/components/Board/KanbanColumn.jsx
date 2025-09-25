@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useDrop } from "react-dnd";
 import TaskCard from "./TaskCard";
 import { addTask } from "../../services/services";
+import { FaExclamationCircle } from "react-icons/fa";
+import * as Toast from "@radix-ui/react-toast";
 
 function KanbanColumn({
   title,
@@ -16,7 +18,16 @@ function KanbanColumn({
   users,
 }) {
   const [showAddNewTask, setshowAddNewTask] = useState(false);
-  const [newTask, setNewTask] = useState([]);
+  const [newTask, setNewTask] = useState({
+    Task: "",
+    Description: "",
+    Deadline: "",
+    Assignee: "",
+  });
+
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastColor, setToastColor] = useState("");
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: "TASK", // Must match the type from TaskCard's useDrag
@@ -40,12 +51,32 @@ function KanbanColumn({
 
   async function handleSubmit(e, columnTitle) {
     e.preventDefault();
-    if (!newTask.Task || !newTask.Description || !newTask.Deadline) return;
+    if (
+      !newTask.Task ||
+      !newTask.Description ||
+      !newTask.Deadline ||
+      !newTask.Assignee
+    ) {
+      setToastMessage("All fields are required!");
+      setToastOpen(true);
+      setToastColor("bg-red-200")
+      return;
+    }
+
+    setToastMessage("Adding Task...");
+      setToastOpen(true);
+      setToastColor("bg-orange-100")
+
     const newTaskToSend = { ...newTask, Column: columnTitle };
+    console.log("Submitting to Airtable:", newTaskToSend);
     const createdTask = await addTask(newTaskToSend);
     setTasks((prev) => [...prev, createdTask]);
     setshowAddNewTask(false);
-    setNewTask({ Task: "", Description: "", Deadline: "" });
+    setNewTask({ Task: "", Description: "", Deadline: "", Assignee: "" });
+    setToastMessage("Task added successfully!");
+      setToastOpen(true);
+      setToastColor("bg-green-100")
+
   }
 
   return (
@@ -62,7 +93,6 @@ function KanbanColumn({
           +
         </button>
       </div>
-
       {showAddNewTask && (
         <div className="bg-white rounded-lg p-3 mb-2 shadow-sm border border-[#e1e8ed] flex justify-between items-start transition duration-200 ease-in-out hover:shadow-md hover:-translate-y-[1px] cursor-pointer add-task-card">
           <form
@@ -91,6 +121,26 @@ function KanbanColumn({
               className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
             />
+            <select
+              name="Assignee"
+              value={newTask.Assignee}
+              onChange={handleInputChange}
+              className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
+            >
+              <option value="" disabled>
+                Select Assignee
+              </option>
+              {users
+                .filter(
+                  (user) =>
+                    !user.is_bot && !user.deleted && user.id !== "USLACKBOT"
+                )
+                .map((user) => (
+                  <option key={user.id} value={user.real_name}>
+                    {user.real_name}
+                  </option>
+                ))}
+            </select>
             <div className="flex gap-2 justify-end">
               <button className="bg-orange-300">Add</button>
               <button
@@ -106,7 +156,6 @@ function KanbanColumn({
           </form>
         </div>
       )}
-
       {tasks.map((task) => (
         <TaskCard
           tasks={tasks}
@@ -121,7 +170,6 @@ function KanbanColumn({
           users={users}
         />
       ))}
-
       {/* Show drop hint when empty */}
       {tasks.length === 0 && isOver && (
         <div
@@ -135,6 +183,22 @@ function KanbanColumn({
           Drop task here
         </div>
       )}
+      <Toast.Provider swipeDirection="right">
+        <Toast.Root
+          open={toastOpen}
+          onOpenChange={setToastOpen}
+          className={`${toastColor} text-black rounded-lg p-1 flex items-center space-x-2 shadow-lg w-72 pointer-events-auto animate-slide-in`}
+          duration={4000}
+        >
+          <FaExclamationCircle className="text-black w-5 h-5 ml-2" />
+          <Toast.Description>{toastMessage}</Toast.Description>
+          <Toast.Close className="ml-auto font-bold text-black">
+            ×
+          </Toast.Close>
+        </Toast.Root>
+
+        <Toast.Viewport className="fixed top-6 right-4 flex flex-col gap-2 z-50" />
+      </Toast.Provider>
     </div>
   );
 }

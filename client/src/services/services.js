@@ -1,11 +1,11 @@
 /* Slack fetches */
 
-export const handleSendMessage = async (task, description) => {
+export const handleSendMessage = async (task, description, userID) => {
   const messageFormats = [
     "HONK! This task isn't doing itself:",
     "Waddle over and finish this:",
     "Goose on patrol: finish this ASAP:",
-    "Friendly goose reminder: this task is still waddling behind schedule:",
+    "(Un)friendly goose reminder: this task is still waddling behind schedule:",
   ];
 
   const randomMessageFormat =
@@ -18,7 +18,7 @@ export const handleSendMessage = async (task, description) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        channel: "C09CQ4J6NLF",
+        channel: `${userID}`,
         text: `🪿 *${randomMessageFormat}*\n• ${task} | ${description}`,
       }),
     });
@@ -66,7 +66,7 @@ export const addTask = async (newTask) => {
 
     if (data.id) {
       //airtable doesnt return ok property
-      console.log("✅ Task added succesfully!");
+      console.log("✅ Task added succesfully!", data);
       return data;
     } else {
       console.log(`❌ Task Adding error: ${data.error}`);

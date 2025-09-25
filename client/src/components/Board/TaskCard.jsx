@@ -37,7 +37,13 @@ function TaskCard({
   const [title, setTitle] = useState(task.fields.Task);
   const [deadline, setDeadline] = useState(task.fields.Deadline);
   const [description, setDescription] = useState(task.fields.Description);
-  const [assignee, setAssignee] = useState(task.fields.Assignee);
+  const [assignee, setAssignee] = useState(task.fields.Assignee || "");
+  const [assigneeId, setAssigneeId] = useState("");
+
+  const findUserIdByName = (realName) => {
+    const user = users.find((user) => user.real_name === realName);
+    return user ? user.id : null;
+  };
 
   async function handleDelete(e, taskId) {
     e.preventDefault();
@@ -53,7 +59,15 @@ function TaskCard({
 
   function handleUpdate(e) {
     if (!title || !description || !deadline) return;
-    handleUpdateTask(tasks, setTasks, task.id, title, deadline, description, assignee);
+    handleUpdateTask(
+      tasks,
+      setTasks,
+      task.id,
+      title,
+      deadline,
+      description,
+      assignee
+    );
     setIsOpen(false);
   }
 
@@ -67,7 +81,12 @@ function TaskCard({
     setTitle(task.fields.Task);
     setDeadline(task.fields.Deadline);
     setDescription(task.fields.Description);
-  }, [task]);
+    setAssignee(task.fields.Assignee);
+    if (task.fields.Assignee) {
+      const userId = findUserIdByName(task.fields.Assignee);
+      setAssigneeId(userId);
+    }
+  }, [task, users]);
 
   return (
     <div
@@ -84,18 +103,25 @@ function TaskCard({
         <p className="text-sm text-gray-600 mt-1 mb-0">
           Due: {new Date(task.fields.Deadline).toLocaleDateString("en-GB")}
         </p>
-          {task.fields.Column === "Waiting on others" && (
-            <p className="text-sm text-gray-600 mt-1 mb-0">Waiting on: {task.fields.Assignee}</p>
-          )}
+        {task.fields.Column === "Waiting on others" && (
+          <p className="text-sm text-gray-600 mt-1 mb-0">
+            Waiting on: {task.fields.Assignee}
+          </p>
+        )}
       </div>
 
       {task.fields.Column === "Waiting on others" && (
         <button
-          className="bg-[#e7edff] text-white rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 hover:bg-[#3461e6] active:translate-y-[1px]"
+          className="bg-[#e7edff] text-white rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 hover:bg-[#c0ccef] active:translate-y-[1px]"
           aria-label="Send message"
           onClick={(e) => {
             e.stopPropagation();
-            handleSendMessage(task.fields.Task, task.fields.Description);
+            const currentAssigneeId = findUserIdByName(task.fields.Assignee);
+            handleSendMessage(
+              task.fields.Task,
+              task.fields.Description,
+              currentAssigneeId
+            );
           }}
         >
           🪿
@@ -150,12 +176,24 @@ function TaskCard({
               Assignee:{" "}
               <select
                 value={assignee}
-                onChange={(e) => setAssignee(e.target.value)}
-                className="w-full rounded border p-2"
+                onChange={(e) => {
+                  const selectedName = e.target.value;
+                  setAssignee(selectedName);
+                  const userID = findUserIdByName(selectedName);
+                  setAssigneeId(userID);
+                }}
+                className="w-full rounded border p-2 mb-3"
               >
-                {users.filter(user => !user.is_bot && !user.deleted && user.id !== "USLACKBOT").map((user) => (
-                  <option value={user.real_name}>{user.real_name}</option>
-                ))}
+                {users
+                  .filter(
+                    (user) =>
+                      !user.is_bot && !user.deleted && user.id !== "USLACKBOT"
+                  )
+                  .map((user) => (
+                    <option key={user.id} value={user.real_name}>
+                      {user.real_name}
+                    </option>
+                  ))}
               </select>
             </label>
             <div className="flex gap-4 justify-end">
