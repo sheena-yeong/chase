@@ -38,7 +38,7 @@ function NavBar() {
           className=" m-1 flex items-center bg-orange-300 text-black rounded-full transition-colors"
           onClick={() => setOpen(!open)}
         >
-          Actions<FiChevronDown className="h-4 w-4" />
+          Actions<FiChevronDown className="h-4 w-4 ml-1" />
         </MenuButton>
         <MenuItems className="absolute right-3 mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg focus:outline-none z-10">
           <MenuItem>

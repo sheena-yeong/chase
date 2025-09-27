@@ -94,6 +94,8 @@ function TaskCard({
     if (task.fields.Assignee) {
       const userId = findUserIdByName(task.fields.Assignee);
       setAssigneeId(userId);
+    } else {
+      setAssigneeId("");
     }
   }, [task, users]);
 
@@ -105,7 +107,9 @@ function TaskCard({
         opacity: isDragging ? 0.5 : 1,
         cursor: "move",
       }}
-      onClick={() => setIsDialogOpen(true)}
+      onClick={() => {
+  setIsDialogOpen(true); // This will now set the task ID in the parent
+}}
     >
       <div className="flex flex-col">
         <p className="font-semibold m-0">{task.fields.Task}</p>
@@ -129,6 +133,7 @@ function TaskCard({
             handleSendMessage(
               task.fields.Task,
               task.fields.Description,
+              task.fields.Deadline,
               currentAssigneeId
             );
           }}
@@ -191,7 +196,7 @@ function TaskCard({
                 <>
                   Assignee:{" "}
                   <select
-                    value={assignee || ""}
+                    value={assignee}
                     onChange={(e) => {
                       const selectedName = e.target.value;
                       setAssignee(selectedName);
@@ -200,7 +205,9 @@ function TaskCard({
                     }}
                     className="w-full rounded border p-2 mb-1"
                   >
-                    <option value="" disabled>Select Assignee</option>
+                    <option value="" disabled>
+                      Select Assignee
+                    </option>
                     {users
                       .filter(
                         (user) =>

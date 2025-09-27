@@ -20,27 +20,25 @@ function KanbanColumn({ title, tasks, setTasks, onMoveTask, users }) {
   const [toastMessage, setToastMessage] = useState("");
   const [toastColor, setToastColor] = useState("");
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+const [openDialogTaskId, setOpenDialogTaskId] = useState(null);
 
   const [{ isOver, canDrop }, drop] = useDrop({
-    accept: "TASK", // Must match the type from TaskCard's useDrag
-    drop: (draggedItem) => {
-      // draggedItem contains { id: task.id, task: taskObject }
+  accept: "TASK",
+  drop: (draggedItem) => {
+    if (draggedItem.task.fields.Column !== title) {
+      onMoveTask(tasks, setTasks, draggedItem.id, title);
+    }
 
-      if (draggedItem.task.fields.Column !== title) {
-        onMoveTask(tasks, setTasks, draggedItem.id, title);
-      }
-
-      if (title === "Waiting on others") {
-        setIsDialogOpen(true);
-        setCardMessage("Please select an assignee.");
-      }
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(), // Is something hovering over this column?
-      canDrop: monitor.canDrop(), // Can this column accept what's being dragged?
-    }),
-  });
+    if (title === "Waiting on others") {
+      setOpenDialogTaskId(draggedItem.id); // Set the specific task ID
+      setCardMessage("Please select an assignee.");
+    }
+  },
+  collect: (monitor) => ({
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop(),
+  }),
+});
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -158,20 +156,20 @@ function KanbanColumn({ title, tasks, setTasks, onMoveTask, users }) {
         </div>
       )}
       {tasks.map((task) => (
-        <TaskCard
-          tasks={tasks}
-          key={task.id}
-          task={task}
-          setTasks={setTasks}
-          users={users}
-          setToastOpen={setToastOpen}
-          setToastMessage={setToastMessage}
-          setToastColor={setToastColor}
-          isDialogOpen={isDialogOpen}
-          setIsDialogOpen={setIsDialogOpen}
-          cardMessage={cardMessage}
-        />
-      ))}
+  <TaskCard
+    tasks={tasks}
+    key={task.id}
+    task={task}
+    setTasks={setTasks}
+    users={users}
+    setToastOpen={setToastOpen}
+    setToastMessage={setToastMessage}
+    setToastColor={setToastColor}
+    isDialogOpen={openDialogTaskId === task.id} // Check if this specific task's dialog should be open
+    setIsDialogOpen={(isOpen) => setOpenDialogTaskId(isOpen ? task.id : null)} // Set the specific task ID or null
+    cardMessage={cardMessage}
+  />
+))}
       {/* Show drop hint when empty */}
       {tasks.length === 0 && isOver && (
         <div

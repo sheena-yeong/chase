@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { handleSendMessage } from "../../services/services";
 
-function Users({ users }) {
+function Users({ users, tasks }) {
   const [filteredUsers, setFilteredUsers] = useState(users);
 
   function handleSearch(query) {
@@ -11,6 +12,10 @@ function Users({ users }) {
           .includes(query.toLowerCase())
       )
     );
+  }
+
+  function sendUserSummary(userRealName) {
+    const userSummary = tasks.filter(task => task.fields.Assignee === userRealName);
   }
 
   return (
@@ -96,7 +101,7 @@ function Users({ users }) {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {(!user.is_bot && user.id !== "USLACKBOT") && <button className="bg-[#e7edff]">🪿</button>}
+                          {(!user.is_bot && user.id !== "USLACKBOT") && <button className="bg-[#e7edff]" onClick={() => sendUserSummary(user.real_name)}>🪿</button>}
                       </td>
                     </tr>
                   ))}

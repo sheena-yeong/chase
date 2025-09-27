@@ -1,6 +1,6 @@
 /* Slack fetches */
 
-export const handleSendMessage = async (task, description, userID) => {
+export const handleSendMessage = async (task, description, deadline, userID) => {
   const messageFormats = [
     "HONK! This task isn't doing itself:",
     "Waddle over and finish this:",
@@ -19,7 +19,7 @@ export const handleSendMessage = async (task, description, userID) => {
       },
       body: JSON.stringify({
         channel: `${userID}`,
-        text: `🪿 *${randomMessageFormat}*\n• ${task} | ${description}`,
+        text: `🪿 *${randomMessageFormat}*\nTask: ${task} | ${description}\nDue: ${deadline}`,
       }),
     });
 

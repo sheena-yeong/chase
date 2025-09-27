@@ -55,7 +55,7 @@ function App() {
             </div>
           }
         />
-        <Route path="/users" element={<Users users={users} />}></Route>
+        <Route path="/users" element={<Users users={users} tasks={tasks}/>}></Route>
       </Routes>
     </>
   );
