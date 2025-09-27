@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { handleSendMessage } from "../../services/services";
+import { handleSendMessage, handleSendSummary } from "../../services/services";
 
 function Users({ users, tasks }) {
   const [filteredUsers, setFilteredUsers] = useState(users);
@@ -14,8 +14,13 @@ function Users({ users, tasks }) {
     );
   }
 
-  function sendUserSummary(userRealName) {
-    const userSummary = tasks.filter(task => task.fields.Assignee === userRealName);
+  function sendUserSummary(userId, userRealName) {
+    console.log(users)
+    const userSummary = tasks.filter(
+      (task) => task.fields.Assignee === userRealName
+    );
+    handleSendSummary(userSummary, userId);
+
   }
 
   return (
@@ -101,7 +106,14 @@ function Users({ users, tasks }) {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {(!user.is_bot && user.id !== "USLACKBOT") && <button className="bg-[#e7edff]" onClick={() => sendUserSummary(user.real_name)}>🪿</button>}
+                        {!user.is_bot && user.id !== "USLACKBOT" && (
+                          <button
+                            className="bg-[#e7edff]"
+                            onClick={() => sendUserSummary(user.id, user.real_name)}
+                          >
+                            🪿
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}

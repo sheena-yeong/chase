@@ -6,8 +6,6 @@ import { handleMoveTask } from "../../services/services";
 
 function KanbanBoard({ tasks, setTasks, loadTasks, users }) {
   const columns = ["Waiting on others", "Not Started", "In Progress", "Done"];
-  const [channel, setChannel] = useState("C09CQ4J6NLF");
-  const [message, setMessage] = useState("");
 
   return (
     <>
