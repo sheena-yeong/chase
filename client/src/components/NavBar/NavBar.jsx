@@ -35,7 +35,7 @@ function NavBar() {
       </NavLink>
       <Menu as="div" className="ml-auto relative pb-1 px-4">
         <MenuButton
-          className=" mx-1 flex items-center bg-orange-300 text-black rounded-full hover:bg-orange-400 transition-colors"
+          className=" m-1 flex items-center bg-orange-300 text-black rounded-full transition-colors"
           onClick={() => setOpen(!open)}
         >
           Actions

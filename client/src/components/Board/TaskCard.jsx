@@ -112,7 +112,7 @@ function TaskCard({
 
       {task.fields.Column === "Waiting on others" && (
         <button
-          className="bg-[#e7edff] text-white rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 hover:bg-[#c0ccef] active:translate-y-[1px]"
+          className="bg-[#e7edff] text-white rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 active:translate-y-[1px]"
           aria-label="Send message"
           onClick={(e) => {
             e.stopPropagation();
@@ -160,6 +160,8 @@ function TaskCard({
               <input
                 type="date"
                 value={deadline?.slice(0, 10)} // Airtable returns ISO string
+                min={new Date().toISOString().split("T")[0]} // today onwards
+                max="2050-12-31"
                 onChange={(e) => setDeadline(e.target.value)}
                 className="w-full rounded border p-2 mb-4"
               />
@@ -173,28 +175,34 @@ function TaskCard({
               />
             </label>
             <label>
-              Assignee:{" "}
-              <select
-                value={assignee}
-                onChange={(e) => {
-                  const selectedName = e.target.value;
-                  setAssignee(selectedName);
-                  const userID = findUserIdByName(selectedName);
-                  setAssigneeId(userID);
-                }}
-                className="w-full rounded border p-2 mb-3"
-              >
-                {users
-                  .filter(
-                    (user) =>
-                      !user.is_bot && !user.deleted && user.id !== "USLACKBOT"
-                  )
-                  .map((user) => (
-                    <option key={user.id} value={user.real_name}>
-                      {user.real_name}
-                    </option>
-                  ))}
-              </select>
+              {task.fields.Column === "Waiting on others" && (
+                <>
+                  Assignee:{" "}
+                  <select
+                    value={assignee}
+                    onChange={(e) => {
+                      const selectedName = e.target.value;
+                      setAssignee(selectedName);
+                      const userID = findUserIdByName(selectedName);
+                      setAssigneeId(userID);
+                    }}
+                    className="w-full rounded border p-2 mb-3"
+                  >
+                    {users
+                      .filter(
+                        (user) =>
+                          !user.is_bot &&
+                          !user.deleted &&
+                          user.id !== "USLACKBOT"
+                      )
+                      .map((user) => (
+                        <option key={user.id} value={user.real_name}>
+                          {user.real_name}
+                        </option>
+                      ))}
+                  </select>
+                </>
+              )}
             </label>
             <div className="flex gap-4 justify-end">
               <button onClick={handleUpdate} className="bg-green-200">

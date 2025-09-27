@@ -96,7 +96,7 @@ function Users({ users }) {
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <button>🪿</button>
+                          {(!user.is_bot && user.id !== "USLACKBOT") && <button>🪿</button>}
                       </td>
                     </tr>
                   ))}
