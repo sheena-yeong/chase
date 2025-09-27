@@ -65,7 +65,15 @@ function App() {
         />
         <Route
           path="/users"
-          element={<Users users={users} tasks={tasks} />}
+          element={
+            <Users
+              users={users}
+              tasks={tasks}
+              setToastOpen={setToastOpen}
+              setToastMessage={setToastMessage}
+              setToastColor={setToastColor}
+            />
+          }
         ></Route>
       </Routes>
       <Toast.Provider swipeDirection="right">

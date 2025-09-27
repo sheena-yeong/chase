@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { handleSendMessage, handleSendSummary } from "../../services/services";
 
-function Users({ users, tasks }) {
+function Users({ users, tasks, setToastOpen, setToastMessage, setToastColor }) {
   const [filteredUsers, setFilteredUsers] = useState(users);
 
   function handleSearch(query) {
@@ -15,12 +15,14 @@ function Users({ users, tasks }) {
   }
 
   function sendUserSummary(userId, userRealName) {
-    console.log(users)
+    console.log(users);
     const userSummary = tasks.filter(
       (task) => task.fields.Assignee === userRealName
     );
     handleSendSummary(userSummary, userId);
-
+    setToastOpen(true);
+            setToastColor("bg-green-100");
+            setToastMessage("Slack message sent!")
   }
 
   return (
@@ -55,11 +57,11 @@ function Users({ users, tasks }) {
                   <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="w-1/2 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="w-1/3 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Email
                   </th>
                   <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Chase
+                    Chase all tasks
                   </th>
                 </tr>
               </thead>
@@ -109,7 +111,9 @@ function Users({ users, tasks }) {
                         {!user.is_bot && user.id !== "USLACKBOT" && (
                           <button
                             className="bg-[#e7edff]"
-                            onClick={() => sendUserSummary(user.id, user.real_name)}
+                            onClick={() =>
+                              sendUserSummary(user.id, user.real_name)
+                            }
                           >
                             🪿
                           </button>
