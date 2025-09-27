@@ -5,7 +5,16 @@ import { addTask } from "../../services/services";
 import { FaExclamationCircle } from "react-icons/fa";
 import * as Toast from "@radix-ui/react-toast";
 
-function KanbanColumn({ title, tasks, setTasks, onMoveTask, users }) {
+function KanbanColumn({
+  title,
+  tasks,
+  setTasks,
+  onMoveTask,
+  users,
+  setToastOpen,
+  setToastMessage,
+  setToastColor,
+}) {
   const [showAddNewTask, setshowAddNewTask] = useState(false);
   const [newTask, setNewTask] = useState({
     Task: "",
@@ -16,29 +25,25 @@ function KanbanColumn({ title, tasks, setTasks, onMoveTask, users }) {
 
   const [cardMessage, setCardMessage] = useState("");
 
-  const [toastOpen, setToastOpen] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
-  const [toastColor, setToastColor] = useState("");
-
-const [openDialogTaskId, setOpenDialogTaskId] = useState(null);
+  const [openDialogTaskId, setOpenDialogTaskId] = useState(null);
 
   const [{ isOver, canDrop }, drop] = useDrop({
-  accept: "TASK",
-  drop: (draggedItem) => {
-    if (draggedItem.task.fields.Column !== title) {
-      onMoveTask(tasks, setTasks, draggedItem.id, title);
-    }
+    accept: "TASK",
+    drop: (draggedItem) => {
+      if (draggedItem.task.fields.Column !== title) {
+        onMoveTask(tasks, setTasks, draggedItem.id, title);
+      }
 
-    if (title === "Waiting on others") {
-      setOpenDialogTaskId(draggedItem.id); // Set the specific task ID
-      setCardMessage("Please select an assignee.");
-    }
-  },
-  collect: (monitor) => ({
-    isOver: monitor.isOver(),
-    canDrop: monitor.canDrop(),
-  }),
-});
+      if (title === "Waiting on others") {
+        setOpenDialogTaskId(draggedItem.id); // Set the specific task ID
+        setCardMessage("Please select an assignee.");
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  });
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -47,11 +52,7 @@ const [openDialogTaskId, setOpenDialogTaskId] = useState(null);
 
   async function handleSubmit(e, columnTitle) {
     e.preventDefault();
-    if (
-      !newTask.Task ||
-      !newTask.Description ||
-      !newTask.Deadline
-    ) {
+    if (!newTask.Task || !newTask.Description || !newTask.Deadline) {
       setToastMessage("All fields are required!");
       setToastOpen(true);
       setToastColor("bg-red-200");
@@ -156,20 +157,22 @@ const [openDialogTaskId, setOpenDialogTaskId] = useState(null);
         </div>
       )}
       {tasks.map((task) => (
-  <TaskCard
-    tasks={tasks}
-    key={task.id}
-    task={task}
-    setTasks={setTasks}
-    users={users}
-    setToastOpen={setToastOpen}
-    setToastMessage={setToastMessage}
-    setToastColor={setToastColor}
-    isDialogOpen={openDialogTaskId === task.id} // Check if this specific task's dialog should be open
-    setIsDialogOpen={(isOpen) => setOpenDialogTaskId(isOpen ? task.id : null)} // Set the specific task ID or null
-    cardMessage={cardMessage}
-  />
-))}
+        <TaskCard
+          tasks={tasks}
+          key={task.id}
+          task={task}
+          setTasks={setTasks}
+          users={users}
+          setToastOpen={setToastOpen}
+          setToastMessage={setToastMessage}
+          setToastColor={setToastColor}
+          isDialogOpen={openDialogTaskId === task.id} // Check if this specific task's dialog should be open
+          setIsDialogOpen={(isOpen) =>
+            setOpenDialogTaskId(isOpen ? task.id : null)
+          } // Set the specific task ID or null
+          cardMessage={cardMessage}
+        />
+      ))}
       {/* Show drop hint when empty */}
       {tasks.length === 0 && isOver && (
         <div
@@ -183,20 +186,6 @@ const [openDialogTaskId, setOpenDialogTaskId] = useState(null);
           Drop task here
         </div>
       )}
-      <Toast.Provider swipeDirection="right">
-        <Toast.Root
-          open={toastOpen}
-          onOpenChange={setToastOpen}
-          className={`${toastColor} text-black rounded-lg p-1 flex items-center space-x-2 shadow-lg w-72 pointer-events-auto animate-slide-in`}
-          duration={4000}
-        >
-          <FaExclamationCircle className="text-black w-5 h-5 ml-2" />
-          <Toast.Description>{toastMessage}</Toast.Description>
-          <Toast.Close className="ml-auto font-bold text-black">×</Toast.Close>
-        </Toast.Root>
-
-        <Toast.Viewport className="fixed top-6 right-4 flex flex-col gap-2 z-50" />
-      </Toast.Provider>
     </div>
   );
 }

@@ -5,10 +5,15 @@ import KanbanBoard from "./components/Board/KanbanBoard";
 import NavBar from "./components/NavBar/NavBar";
 import Users from "./components/SlackDirectory/users";
 import { fetchTasks, fetchSlackUsers } from "./services/services";
+import * as Toast from "@radix-ui/react-toast";
 
 function App() {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
+
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastColor, setToastColor] = useState("");
 
   const loadTasks = async () => {
     try {
@@ -26,7 +31,7 @@ function App() {
     } catch (error) {
       console.error("Failed to load Slack users:", error);
     }
-  }
+  };
 
   useEffect(() => {
     loadTasks();
@@ -49,14 +54,33 @@ function App() {
                     tasks={tasks}
                     loadTasks={loadTasks}
                     users={users}
+                    setToastOpen={setToastOpen}
+                    setToastMessage={setToastMessage}
+                    setToastColor={setToastColor}
                   />
                 </div>
               </div>
             </div>
           }
         />
-        <Route path="/users" element={<Users users={users} tasks={tasks}/>}></Route>
+        <Route
+          path="/users"
+          element={<Users users={users} tasks={tasks} />}
+        ></Route>
       </Routes>
+      <Toast.Provider swipeDirection="right">
+        <Toast.Root
+          open={toastOpen}
+          onOpenChange={setToastOpen}
+          className={`${toastColor} text-black rounded-lg p-1 flex items-center space-x-2 shadow-lg w-72 pointer-events-auto animate-slide-in`}
+          duration={4000}
+        >
+          <Toast.Description className="ml-2">{toastMessage}</Toast.Description>
+          <Toast.Close className="ml-auto font-bold text-black">×</Toast.Close>
+        </Toast.Root>
+
+        <Toast.Viewport className="fixed top-6 right-4 flex flex-col gap-2 z-50" />
+      </Toast.Provider>
     </>
   );
 }

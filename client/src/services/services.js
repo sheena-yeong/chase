@@ -23,7 +23,7 @@ export const handleSendMessage = async (
       },
       body: JSON.stringify({
         channel: `${userID}`,
-        text: `🪿 *${randomMessageFormat}*\nTask: ${task} | ${description}\nDue: ${deadline}`,
+        text: `🪿 *${randomMessageFormat}*\nTask: ${task}\nDescription: ${description}\nDue: ${deadline}`,
       }),
     });
 
@@ -40,17 +40,6 @@ export const handleSendMessage = async (
 };
 
 export const handleSendSummary = async (taskData, userId) => {
-  console.log("handleSendSummary:", taskData, userId);
-  const messageFormats = [
-    "HONK! This task isn't doing itself:",
-    "Waddle over and finish this:",
-    "Goose on patrol: finish this ASAP:",
-    "(Un)friendly goose reminder: this task is still waddling behind schedule:",
-  ];
-
-  const randomMessageFormat =
-    messageFormats[Math.floor(Math.random() * messageFormats.length)];
-
   const taskList = taskData
     .map(
       (task) =>
@@ -68,7 +57,7 @@ export const handleSendSummary = async (taskData, userId) => {
       },
       body: JSON.stringify({
         channel: `${userId}`,
-        text: `🪿 *Task Summary:*\n${taskList}`,
+        text: `🪿 *HONK! Here is a summary of tasks waiting on you:*\n${taskList}`,
       }),
     });
 

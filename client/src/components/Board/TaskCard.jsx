@@ -74,7 +74,7 @@ function TaskCard({
       assignee
     );
     setIsDialogOpen(false);
-    setToastMessage("Task updated");
+    setToastMessage("Task updated successfully!");
     setToastOpen(true);
     setToastColor("bg-green-100");
   }
@@ -136,6 +136,9 @@ function TaskCard({
               task.fields.Deadline,
               currentAssigneeId
             );
+            setToastOpen(true);
+            setToastColor("bg-green-100");
+            setToastMessage("Slack message sent!")
           }}
         >
           🪿
