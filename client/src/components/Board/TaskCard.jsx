@@ -17,12 +17,13 @@ function TaskCard({
   tasks,
   task,
   setTasks,
-  loadTasks,
-  message,
-  channel,
-  setMessage,
-  setChannel,
   users,
+  setToastOpen,
+  setToastMessage,
+  setToastColor,
+  isDialogOpen,
+  setIsDialogOpen,
+  cardMessage,
 }) {
   const [{ isDragging }, drag] = useDrag({
     // returns a "drag ref" functino that you attach to the element you want draggable
@@ -33,7 +34,6 @@ function TaskCard({
     }),
   });
 
-  const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState(task.fields.Task);
   const [deadline, setDeadline] = useState(task.fields.Deadline);
   const [description, setDescription] = useState(task.fields.Description);
@@ -51,14 +51,19 @@ function TaskCard({
     try {
       await deleteTask(taskId);
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
-      setIsOpen(false);
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Failed to delete task:", error);
     }
+    setToastMessage("Task deleted successfully!");
+    setToastOpen(true);
+    setToastColor("bg-green-100");
   }
 
-  function handleUpdate(e) {
-    if (!title || !description || !deadline) return;
+  function handleUpdate() {
+    if (!title || !description || !deadline) {
+      return;
+    }
     handleUpdateTask(
       tasks,
       setTasks,
@@ -68,13 +73,17 @@ function TaskCard({
       description,
       assignee
     );
-    setIsOpen(false);
+    setIsDialogOpen(false);
+    setToastMessage("Task updated");
+    setToastOpen(true);
+    setToastColor("bg-green-100");
   }
 
   const resetFormData = () => {
     setTitle(task.fields.Task);
     setDeadline(task.fields.Deadline);
     setDescription(task.fields.Description);
+    setAssignee(task.fields.Assignee || "");
   };
 
   useEffect(() => {
@@ -96,7 +105,7 @@ function TaskCard({
         opacity: isDragging ? 0.5 : 1,
         cursor: "move",
       }}
-      onClick={() => setIsOpen(true)}
+      onClick={() => setIsDialogOpen(true)}
     >
       <div className="flex flex-col">
         <p className="font-semibold m-0">{task.fields.Task}</p>
@@ -112,7 +121,7 @@ function TaskCard({
 
       {task.fields.Column === "Waiting on others" && (
         <button
-          className="bg-[#e7edff] text-white rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 active:translate-y-[1px]"
+          className="bg-[#e7edff] rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 active:translate-y-[1px]"
           aria-label="Send message"
           onClick={(e) => {
             e.stopPropagation();
@@ -129,10 +138,11 @@ function TaskCard({
       )}
 
       <Dialog
-        open={isOpen}
+        open={isDialogOpen}
         onClose={() => {
+          if (task.fields.Column === "Waiting on others" && !assignee) return;
           resetFormData();
-          setIsOpen(false);
+          setIsDialogOpen(false);
         }}
         className="relative z-50"
       >
@@ -143,13 +153,14 @@ function TaskCard({
               <label>
                 Task:
                 <input
+                  maxLength={100}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full rounded border p-2"
                 />
               </label>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => setIsDialogOpen(false)}
                 className="text-xl absolute left-101 bottom-10 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
                 ×
@@ -160,7 +171,7 @@ function TaskCard({
               <input
                 type="date"
                 value={deadline?.slice(0, 10)} // Airtable returns ISO string
-                min={new Date().toISOString().split("T")[0]} // today onwards
+                min={new Date().toISOString().split("T")[0]}
                 max="2050-12-31"
                 onChange={(e) => setDeadline(e.target.value)}
                 className="w-full rounded border p-2 mb-4"
@@ -169,6 +180,7 @@ function TaskCard({
             <label>
               Description:{" "}
               <textarea
+                maxLength={1000}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full rounded border p-2"
@@ -179,15 +191,16 @@ function TaskCard({
                 <>
                   Assignee:{" "}
                   <select
-                    value={assignee}
+                    value={assignee || ""}
                     onChange={(e) => {
                       const selectedName = e.target.value;
                       setAssignee(selectedName);
                       const userID = findUserIdByName(selectedName);
                       setAssigneeId(userID);
                     }}
-                    className="w-full rounded border p-2 mb-3"
+                    className="w-full rounded border p-2 mb-1"
                   >
+                    <option value="" disabled>Select Assignee</option>
                     {users
                       .filter(
                         (user) =>
@@ -201,6 +214,7 @@ function TaskCard({
                         </option>
                       ))}
                   </select>
+                  <div className="text-red-500 m-0">{cardMessage || ""}</div>
                 </>
               )}
             </label>

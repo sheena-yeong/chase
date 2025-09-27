@@ -5,18 +5,7 @@ import { addTask } from "../../services/services";
 import { FaExclamationCircle } from "react-icons/fa";
 import * as Toast from "@radix-ui/react-toast";
 
-function KanbanColumn({
-  title,
-  tasks,
-  setTasks,
-  onMoveTask,
-  loadTasks,
-  channel,
-  message,
-  setChannel,
-  setMessage,
-  users,
-}) {
+function KanbanColumn({ title, tasks, setTasks, onMoveTask, users }) {
   const [showAddNewTask, setshowAddNewTask] = useState(false);
   const [newTask, setNewTask] = useState({
     Task: "",
@@ -25,9 +14,13 @@ function KanbanColumn({
     Assignee: "",
   });
 
+  const [cardMessage, setCardMessage] = useState("");
+
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastColor, setToastColor] = useState("");
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: "TASK", // Must match the type from TaskCard's useDrag
@@ -36,6 +29,11 @@ function KanbanColumn({
 
       if (draggedItem.task.fields.Column !== title) {
         onMoveTask(tasks, setTasks, draggedItem.id, title);
+      }
+
+      if (title === "Waiting on others") {
+        setIsDialogOpen(true);
+        setCardMessage("Please select an assignee.");
       }
     },
     collect: (monitor) => ({
@@ -54,18 +52,16 @@ function KanbanColumn({
     if (
       !newTask.Task ||
       !newTask.Description ||
-      !newTask.Deadline ||
-      !newTask.Assignee
+      !newTask.Deadline
     ) {
       setToastMessage("All fields are required!");
       setToastOpen(true);
-      setToastColor("bg-red-200")
+      setToastColor("bg-red-200");
       return;
     }
-
     setToastMessage("Adding Task...");
-      setToastOpen(true);
-      setToastColor("bg-orange-100")
+    setToastOpen(true);
+    setToastColor("bg-orange-100");
 
     const newTaskToSend = { ...newTask, Column: columnTitle };
     console.log("Submitting to Airtable:", newTaskToSend);
@@ -74,9 +70,8 @@ function KanbanColumn({
     setshowAddNewTask(false);
     setNewTask({ Task: "", Description: "", Deadline: "", Assignee: "" });
     setToastMessage("Task added successfully!");
-      setToastOpen(true);
-      setToastColor("bg-green-100")
-
+    setToastOpen(true);
+    setToastColor("bg-green-100");
   }
 
   return (
@@ -97,7 +92,7 @@ function KanbanColumn({
         <div className="bg-white rounded-lg p-3 mb-2 shadow-sm border border-[#e1e8ed] flex justify-between items-start transition duration-200 ease-in-out hover:shadow-md hover:-translate-y-[1px] cursor-pointer add-task-card">
           <form
             onSubmit={(e) => handleSubmit(e, title)}
-            className="flex flex-col gap-2 "
+            className="flex flex-col gap-2 w-full"
           >
             <input
               placeholder="Task"
@@ -105,6 +100,7 @@ function KanbanColumn({
               value={newTask.Task}
               className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
+              maxLength={100}
             />
             <textarea
               placeholder="Description"
@@ -112,6 +108,7 @@ function KanbanColumn({
               value={newTask.Description}
               className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
+              maxLength={1000}
             />
             <input
               placeholder="Deadline"
@@ -120,27 +117,31 @@ function KanbanColumn({
               value={newTask.Deadline}
               className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
+              min={new Date().toISOString().split("T")[0]}
+              max="2050-12-31"
             />
-            <select
-              name="Assignee"
-              value={newTask.Assignee}
-              onChange={handleInputChange}
-              className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
-            >
-              <option value="" disabled>
-                Select Assignee
-              </option>
-              {users
-                .filter(
-                  (user) =>
-                    !user.is_bot && !user.deleted && user.id !== "USLACKBOT"
-                )
-                .map((user) => (
-                  <option key={user.id} value={user.real_name}>
-                    {user.real_name}
-                  </option>
-                ))}
-            </select>
+            {title === "Waiting on others" && (
+              <select
+                name="Assignee"
+                value={newTask.Assignee}
+                onChange={handleInputChange}
+                className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
+              >
+                <option value="" disabled>
+                  Select Assignee
+                </option>
+                {users
+                  .filter(
+                    (user) =>
+                      !user.is_bot && !user.deleted && user.id !== "USLACKBOT"
+                  )
+                  .map((user) => (
+                    <option key={user.id} value={user.real_name}>
+                      {user.real_name}
+                    </option>
+                  ))}
+              </select>
+            )}
             <div className="flex gap-2 justify-end">
               <button className="bg-orange-300">Add</button>
               <button
@@ -162,12 +163,13 @@ function KanbanColumn({
           key={task.id}
           task={task}
           setTasks={setTasks}
-          channel={channel}
-          message={message}
-          setChannel={setChannel}
-          setMessage={setMessage}
-          loadTasks={loadTasks}
           users={users}
+          setToastOpen={setToastOpen}
+          setToastMessage={setToastMessage}
+          setToastColor={setToastColor}
+          isDialogOpen={isDialogOpen}
+          setIsDialogOpen={setIsDialogOpen}
+          cardMessage={cardMessage}
         />
       ))}
       {/* Show drop hint when empty */}
@@ -192,9 +194,7 @@ function KanbanColumn({
         >
           <FaExclamationCircle className="text-black w-5 h-5 ml-2" />
           <Toast.Description>{toastMessage}</Toast.Description>
-          <Toast.Close className="ml-auto font-bold text-black">
-            ×
-          </Toast.Close>
+          <Toast.Close className="ml-auto font-bold text-black">×</Toast.Close>
         </Toast.Root>
 
         <Toast.Viewport className="fixed top-6 right-4 flex flex-col gap-2 z-50" />

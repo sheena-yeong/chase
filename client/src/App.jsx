@@ -23,7 +23,6 @@ function App() {
     try {
       const data = await fetchSlackUsers();
       setUsers(data.members);
-      console.log("Fetched users:", data);
     } catch (error) {
       console.error("Failed to load Slack users:", error);
     }

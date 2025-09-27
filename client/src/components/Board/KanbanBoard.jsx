@@ -11,7 +11,6 @@ function KanbanBoard({ tasks, setTasks, loadTasks, users }) {
 
   return (
     <>
-     
     <div className="flex flex-1 gap-[15px] p-[10px] overflow-x-auto">
       <DndProvider backend={HTML5Backend}>
         {columns.map((column, index) => (
@@ -20,12 +19,7 @@ function KanbanBoard({ tasks, setTasks, loadTasks, users }) {
           key={index}
           title={column}
           tasks={tasks.filter((task) => task.fields.Column === column)}
-          loadTasks={loadTasks}
           onMoveTask={handleMoveTask}
-          channel={channel}
-          message={message}
-          setChannel={setChannel}
-          setMessage={setMessage}
           users={users}
           />
         ))}

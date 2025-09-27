@@ -103,18 +103,34 @@ export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
   setTasks((prevTasks) =>
     prevTasks.map((task) =>
       task.id === taskId
-        ? { ...task, fields: { ...task.fields, Column: newColumn } }
+        ? {
+            ...task,
+            fields: {
+              ...task.fields,
+              Column: newColumn,
+              Assignee:
+                newColumn === "Waiting on others" ? task.fields.Assignee : "",
+            },
+          }
         : task
     )
   );
   try {
+    // Prepare fields to update
+    const fieldsToUpdate = { Column: newColumn };
+
+    // Clear assignee in database if moving away from "Waiting on others"
+    if (newColumn !== "Waiting on others") {
+      fieldsToUpdate.Assignee = "";
+    }
+
     const res = await fetch(`http://localhost:3001/airtable/tasks/${taskId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        fields: { Column: newColumn },
+        fields: fieldsToUpdate,
       }),
     });
 
@@ -129,7 +145,6 @@ export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
     );
   } catch (error) {
     console.error("Failed to update task:", error);
-
     setTasks(originalTasks);
   }
 };
