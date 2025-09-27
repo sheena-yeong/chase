@@ -17,7 +17,11 @@ function App() {
 
   const loadTasks = async () => {
     try {
+      setToastOpen(true);
+      setToastMessage("Retrieving tasks...");
+      setToastColor("bg-orange-100")
       const data = await fetchTasks();
+      setToastOpen(false);
       setTasks(data);
     } catch (error) {
       console.error("Error:", error.message);

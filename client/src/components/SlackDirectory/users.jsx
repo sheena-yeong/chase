@@ -21,8 +21,8 @@ function Users({ users, tasks, setToastOpen, setToastMessage, setToastColor }) {
     );
     handleSendSummary(userSummary, userId);
     setToastOpen(true);
-            setToastColor("bg-green-100");
-            setToastMessage("Slack message sent!")
+    setToastColor("bg-green-100");
+    setToastMessage("Slack message sent!");
   }
 
   return (
@@ -51,16 +51,16 @@ function Users({ users, tasks, setToastOpen, setToastMessage, setToastColor }) {
             <table className="min-w-full table-fixed divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     User ID
                   </th>
                   <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="w-1/3 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Email
                   </th>
-                  <th className="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="w-1/6 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Chase all tasks
                   </th>
                 </tr>

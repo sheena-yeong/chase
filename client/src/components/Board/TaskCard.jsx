@@ -108,8 +108,8 @@ function TaskCard({
         cursor: "move",
       }}
       onClick={() => {
-  setIsDialogOpen(true); // This will now set the task ID in the parent
-}}
+        setIsDialogOpen(true); // This will now set the task ID in the parent
+      }}
     >
       <div className="flex flex-col">
         <p className="font-semibold m-0">{task.fields.Task}</p>
@@ -138,7 +138,7 @@ function TaskCard({
             );
             setToastOpen(true);
             setToastColor("bg-green-100");
-            setToastMessage("Slack message sent!")
+            setToastMessage("Slack message sent!");
           }}
         >
           🪿
@@ -148,7 +148,7 @@ function TaskCard({
       <Dialog
         open={isDialogOpen}
         onClose={() => {
-          if (task.fields.Column === "Waiting on others" && !assignee) return;
+          if (task.fields.Column === "Waiting on others" && !assignee) return; // prevent close if task has no assignee set
           resetFormData();
           setIsDialogOpen(false);
         }}
@@ -168,7 +168,11 @@ function TaskCard({
                 />
               </label>
               <button
-                onClick={() => setIsDialogOpen(false)}
+                onClick={() => {
+                  if (task.fields.Column === "Waiting on others" && !assignee) return;
+                  setIsDialogOpen(false)
+                }
+                }
                 className="text-xl absolute left-101 bottom-10 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
                 ×
