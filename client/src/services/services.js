@@ -16,16 +16,19 @@ export const handleSendMessage = async (
     messageFormats[Math.floor(Math.random() * messageFormats.length)];
 
   try {
-    const res = await fetch("https://chase-production-b8db.up.railway.app/slack/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        channel: `${userID}`,
-        text: `🪿 *${randomMessageFormat}*\nTask: ${task}\nDescription: ${description}\nDue: ${deadline}`,
-      }),
-    });
+    const res = await fetch(
+      "https://chase-production-b8db.up.railway.app/slack/send",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          channel: `${userID}`,
+          text: `🪿 *${randomMessageFormat}*\nTask: ${task}\nDescription: ${description}\nDue: ${deadline}`,
+        }),
+      }
+    );
 
     const data = await res.json();
 
@@ -50,16 +53,19 @@ export const handleSendSummary = async (taskData, userId) => {
     .join("\n");
 
   try {
-    const res = await fetch("https://chase-production-b8db.up.railway.app/slack/send", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        channel: `${userId}`,
-        text: `🪿 *HONK! Here is a summary of tasks waiting on you:*\n${taskList}`,
-      }),
-    });
+    const res = await fetch(
+      "https://chase-production-b8db.up.railway.app/slack/send",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          channel: `${userId}`,
+          text: `🪿 *HONK! Here is a summary of tasks waiting on you:*\n${taskList}`,
+        }),
+      }
+    );
 
     const data = await res.json();
 
@@ -75,7 +81,9 @@ export const handleSendSummary = async (taskData, userId) => {
 
 export const fetchSlackUsers = async () => {
   try {
-    const res = await fetch("https://chase-production-b8db.up.railway.app/slack/users");
+    const res = await fetch(
+      "https://chase-production-b8db.up.railway.app/slack/users"
+    );
     if (!res.ok) {
       throw new Error("Failed to fetch Slack users");
     }
@@ -87,18 +95,27 @@ export const fetchSlackUsers = async () => {
 
 /* Airtable fetches */
 export const fetchTasks = async () => {
-  const res = await fetch("https://chase-production-b8db.up.railway.app/airtable/tasks");
-  if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
-  return res.json();
+  try {
+    const res = await fetch(
+      "https://chase-production-b8db.up.railway.app/airtable/tasks"
+    );
+    if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
+    return res.json();
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 export const addTask = async (newTask) => {
   try {
-    const res = await fetch("https://chase-production-b8db.up.railway.app/airtable/tasks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newTask),
-    });
+    const res = await fetch(
+      "https://chase-production-b8db.up.railway.app/airtable/tasks",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newTask),
+      }
+    );
     const data = await res.json();
 
     if (data.id) {
@@ -115,9 +132,12 @@ export const addTask = async (newTask) => {
 
 export const deleteTask = async (id) => {
   try {
-    const res = await fetch(`https://chase-production-b8db.up.railway.app/tasks/${id}`, {
-      method: "DELETE",
-    });
+    const res = await fetch(
+      `https://chase-production-b8db.up.railway.app/tasks/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
     if (res.ok) {
       // Backend may not return JSON; just return the deleted ID
       console.log("✅ Task deleted successfully!");
@@ -161,15 +181,18 @@ export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
       fieldsToUpdate.Assignee = "";
     }
 
-    const res = await fetch(`https://chase-production-b8db.up.railway.app/airtable/tasks/${taskId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: fieldsToUpdate,
-      }),
-    });
+    const res = await fetch(
+      `https://chase-production-b8db.up.railway.app/airtable/tasks/${taskId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fields: fieldsToUpdate,
+        }),
+      }
+    );
 
     if (!res.ok) {
       throw new Error(`Failed to update task: ${res.status} ${res.statusText}`);
@@ -214,20 +237,23 @@ export const handleUpdateTask = async (
     )
   );
   try {
-    const res = await fetch(`https://chase-production-b8db.up.railway.app/airtable/tasks/${taskId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: {
-          Task: newTask,
-          Deadline: newDeadline,
-          Description: newDescription,
-          Assignee: newAssignee,
+    const res = await fetch(
+      `https://chase-production-b8db.up.railway.app/airtable/tasks/${taskId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    });
+        body: JSON.stringify({
+          fields: {
+            Task: newTask,
+            Deadline: newDeadline,
+            Description: newDescription,
+            Assignee: newAssignee,
+          },
+        }),
+      }
+    );
 
     if (!res.ok) {
       throw new Error(`Failed to update task: ${res.status} ${res.statusText}`);
@@ -248,7 +274,9 @@ export const handleUpdateTask = async (
 export const handleOnClose = async (setTasks) => {
   console.log("Closing the task");
   try {
-    const res = await fetch("https://chase-production-b8db.up.railway.app/airtable/tasks");
+    const res = await fetch(
+      "https://chase-production-b8db.up.railway.app/airtable/tasks"
+    );
 
     if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
 
