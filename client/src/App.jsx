@@ -48,7 +48,7 @@ function App() {
       <NavBar />
       <Routes>
         <Route
-          path="/chase"
+          path="/"
           element={
             <div className="font-[Avenir]">
               <div className="flex h-[calc(100vh-70px)]">
