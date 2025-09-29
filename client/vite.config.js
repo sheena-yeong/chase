@@ -7,6 +7,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: "/chase/",
   build: {
-    outDir: "../docs",
+    outDir: "dist",
   },
 });
