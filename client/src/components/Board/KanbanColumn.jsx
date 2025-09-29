@@ -99,7 +99,7 @@ function KanbanColumn({
               value={newTask.Task}
               className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
-              maxLength={100}
+              maxLength={50}
             />
             <textarea
               placeholder="Description"
@@ -107,7 +107,7 @@ function KanbanColumn({
               value={newTask.Description}
               className="border border-[#e1e8ed] rounded-md p-2 text-[0.95rem]"
               onChange={handleInputChange}
-              maxLength={1000}
+              maxLength={200}
             />
             <input
               placeholder="Deadline"

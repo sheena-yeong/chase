@@ -161,7 +161,7 @@ function TaskCard({
               <label>
                 Task:
                 <input
-                  maxLength={100}
+                  maxLength={50}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full rounded border p-2"
@@ -192,7 +192,7 @@ function TaskCard({
             <label>
               Description:{" "}
               <textarea
-                maxLength={1000}
+                maxLength={200}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full rounded border p-2"
