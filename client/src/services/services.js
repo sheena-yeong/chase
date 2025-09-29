@@ -97,7 +97,7 @@ export const fetchSlackUsers = async () => {
 export const fetchTasks = async () => {
   try {
     const res = await fetch(
-      "https://chase-production-b8db.up.railway.app/airtable/tasks", { timeout: 10000 }
+      "https://chase-production-b8db.up.railway.app/airtable/tasks",
     );
     if (!res.ok) throw new Error(`Failed to fetch records from Airtable Tasks: ${res.status} ${res.statusText}`);
     return res.json();
