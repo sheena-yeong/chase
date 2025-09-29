@@ -13,7 +13,7 @@ app.use(express.json()); //automatically parse JSON request bodies into JavaScri
 
 /************************  Slack Routes ************************/
 app.get("/", (req, res) => {
-  res.send("Proxy server is running!");
+  res.send("Proxy server is running! Hello Railway!");
 });
 
 app.post("/slack/send", async (req, res) => {
