@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useDrop } from "react-dnd";
 import TaskCard from "./TaskCard";
 import { addTask } from "../../services/services";
-import { FaExclamationCircle } from "react-icons/fa";
-import * as Toast from "@radix-ui/react-toast";
 
 function KanbanColumn({
   title,
@@ -24,9 +22,7 @@ function KanbanColumn({
   });
 
   const [cardMessage, setCardMessage] = useState("");
-
   const [openDialogTaskId, setOpenDialogTaskId] = useState(null);
-
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: "TASK",
     drop: (draggedItem) => {
@@ -63,7 +59,6 @@ function KanbanColumn({
     setToastColor("bg-orange-100");
 
     const newTaskToSend = { ...newTask, Column: columnTitle };
-    console.log("Submitting to Airtable:", newTaskToSend);
     const createdTask = await addTask(newTaskToSend);
     setTasks((prev) => [...prev, createdTask]);
     setshowAddNewTask(false);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { handleSendMessage, handleSendSummary } from "../../services/services";
 
 function Users({ users, tasks, setToastOpen, setToastMessage, setToastColor }) {

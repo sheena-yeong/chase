@@ -4,15 +4,8 @@ import { useDrag } from "react-dnd";
 import { handleSendMessage, handleUpdateTask } from "../../services/services";
 import { deleteTask } from "../../services/services";
 import { FaTrashAlt, FaCheckCircle } from "react-icons/fa";
-import {
-  Description,
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 
-// Individual draggable card component
 function TaskCard({
   tasks,
   task,
@@ -169,10 +162,10 @@ function TaskCard({
               </label>
               <button
                 onClick={() => {
-                  if (task.fields.Column === "Waiting on others" && !assignee) return;
-                  setIsDialogOpen(false)
-                }
-                }
+                  if (task.fields.Column === "Waiting on others" && !assignee)
+                    return;
+                  setIsDialogOpen(false);
+                }}
                 className="text-xl absolute left-101 bottom-10 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
                 ×
@@ -233,10 +226,14 @@ function TaskCard({
               )}
             </label>
             <div className="flex gap-4 justify-end">
-              <button onClick={() => {
-                if (task.fields.Column === "Waiting on others" && !assignee) return;
-                handleUpdate()
-                }} className="bg-green-200">
+              <button
+                onClick={() => {
+                  if (task.fields.Column === "Waiting on others" && !assignee)
+                    return;
+                  handleUpdate();
+                }}
+                className="bg-green-200"
+              >
                 <FaCheckCircle />
               </button>
               <button

@@ -86,7 +86,6 @@ export const fetchSlackUsers = async () => {
 };
 
 /* Airtable fetches */
-
 export const fetchTasks = async () => {
   const res = await fetch("https://chase-production-b8db.up.railway.app/airtable/tasks");
   if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");

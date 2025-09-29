@@ -56,7 +56,6 @@ function App() {
                   <KanbanBoard
                     setTasks={setTasks}
                     tasks={tasks}
-                    loadTasks={loadTasks}
                     users={users}
                     setToastOpen={setToastOpen}
                     setToastMessage={setToastMessage}
