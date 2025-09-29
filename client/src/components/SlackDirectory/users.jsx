@@ -19,10 +19,17 @@ function Users({ users, tasks, setToastOpen, setToastMessage, setToastColor }) {
     const userSummary = tasks.filter(
       (task) => task.fields.Assignee === userRealName
     );
-    handleSendSummary(userSummary, userId);
-    setToastOpen(true);
-    setToastColor("bg-green-100");
-    setToastMessage("Slack message sent!");
+    console.log("userSummary:", userSummary);
+    if (userSummary.length === 0) {
+      setToastOpen(true);
+      setToastColor("bg-red-100");
+      setToastMessage("No tasks waiting on them!");
+    } else {
+      setToastOpen(true);
+      setToastColor("bg-green-100");
+      setToastMessage("Slack message sent!");
+      handleSendSummary(userSummary, userId);
+    }
   }
 
   return (

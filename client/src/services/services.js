@@ -16,7 +16,7 @@ export const handleSendMessage = async (
     messageFormats[Math.floor(Math.random() * messageFormats.length)];
 
   try {
-    const res = await fetch("http://localhost:3001/slack/send", {
+    const res = await fetch("https://chase-production-b8db.up.railway.app/slack/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export const handleSendSummary = async (taskData, userId) => {
     .join("\n");
 
   try {
-    const res = await fetch("http://localhost:3001/slack/send", {
+    const res = await fetch("https://chase-production-b8db.up.railway.app/slack/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export const handleSendSummary = async (taskData, userId) => {
 
 export const fetchSlackUsers = async () => {
   try {
-    const res = await fetch("http://localhost:3001/slack/users");
+    const res = await fetch("https://chase-production-b8db.up.railway.app/slack/users");
     if (!res.ok) {
       throw new Error("Failed to fetch Slack users");
     }
@@ -88,14 +88,14 @@ export const fetchSlackUsers = async () => {
 /* Airtable fetches */
 
 export const fetchTasks = async () => {
-  const res = await fetch("http://localhost:3001/airtable/tasks");
+  const res = await fetch("https://chase-production-b8db.up.railway.app/airtable/tasks");
   if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
   return res.json();
 };
 
 export const addTask = async (newTask) => {
   try {
-    const res = await fetch("http://localhost:3001/airtable/tasks", {
+    const res = await fetch("https://chase-production-b8db.up.railway.app/airtable/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTask),
@@ -116,7 +116,7 @@ export const addTask = async (newTask) => {
 
 export const deleteTask = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3001/airtable/tasks/${id}`, {
+    const res = await fetch(`https://chase-production-b8db.up.railway.app/tasks/${id}`, {
       method: "DELETE",
     });
     if (res.ok) {
@@ -162,7 +162,7 @@ export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
       fieldsToUpdate.Assignee = "";
     }
 
-    const res = await fetch(`http://localhost:3001/airtable/tasks/${taskId}`, {
+    const res = await fetch(`https://chase-production-b8db.up.railway.app/airtable/tasks/${taskId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -215,7 +215,7 @@ export const handleUpdateTask = async (
     )
   );
   try {
-    const res = await fetch(`http://localhost:3001/airtable/tasks/${taskId}`, {
+    const res = await fetch(`https://chase-production-b8db.up.railway.app/airtable/tasks/${taskId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -249,7 +249,7 @@ export const handleUpdateTask = async (
 export const handleOnClose = async (setTasks) => {
   console.log("Closing the task");
   try {
-    const res = await fetch("http://localhost:3001/airtable/tasks");
+    const res = await fetch("https://chase-production-b8db.up.railway.app/airtable/tasks");
 
     if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
 

@@ -233,7 +233,10 @@ function TaskCard({
               )}
             </label>
             <div className="flex gap-4 justify-end">
-              <button onClick={handleUpdate} className="bg-green-200">
+              <button onClick={() => {
+                if (task.fields.Column === "Waiting on others" && !assignee) return;
+                handleUpdate()
+                }} className="bg-green-200">
                 <FaCheckCircle />
               </button>
               <button

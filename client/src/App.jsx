@@ -19,7 +19,7 @@ function App() {
     try {
       setToastOpen(true);
       setToastMessage("Retrieving tasks...");
-      setToastColor("bg-orange-100")
+      setToastColor("bg-orange-100");
       const data = await fetchTasks();
       setToastOpen(false);
       setTasks(data);
