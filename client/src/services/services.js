@@ -99,10 +99,10 @@ export const fetchTasks = async () => {
     const res = await fetch(
       "https://chase-production-b8db.up.railway.app/airtable/tasks"
     );
-    if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
-    console.log(error.message);
+    if (!res.ok) throw new Error(`Failed to fetch records from Airtable Tasks: ${res.status} ${res.statusText}`);
     return res.json();
   } catch (error) {
+    console.log(error.message);
   }
 };
 
