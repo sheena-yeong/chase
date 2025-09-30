@@ -6,7 +6,7 @@
   "homepage": "https://sheena-yeong.github.io/chase/",
   "scripts": {
     "dev": "vite",
-    "start": "npm run dev",
+    "start": "vite preview --port $PORT --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
