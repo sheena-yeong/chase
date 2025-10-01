@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: "/",
   build: {
-    outDir: "dist",
+    outDir: "../docs",
+    emptyOutdir: true
   },
   server: {
     host: '0.0.0.0', // Add this
