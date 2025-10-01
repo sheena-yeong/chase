@@ -8,7 +8,15 @@ const PORT = process.env.PORT;
 
 const app = express();
 
-app.use(cors());
+const cors = require('cors');
+
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://outstanding-abundance-production.up.railway.app'
+  ],
+  credentials: true
+}));
 app.use(express.json()); //automatically parse JSON request bodies into JavaScript objects
 
 /************************  Slack Routes ************************/

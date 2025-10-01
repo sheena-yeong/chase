@@ -12,10 +12,11 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0', // Add this
-    port: process.env.PORT || 5173 // Add this
+    port: process.env.PORT || 5173
   },
   preview: {
     host: '0.0.0.0', // Add this
-    port: process.env.PORT || 4173 // Add this
+    port: process.env.PORT || 4173,
+    allowedHosts: ['outstanding-abundance-production.up.railway.app']
   }
 });
