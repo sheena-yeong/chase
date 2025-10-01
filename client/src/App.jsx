@@ -16,17 +16,28 @@ function App() {
   const [toastColor, setToastColor] = useState("");
 
   const loadTasks = async () => {
-    try {
-      setToastOpen(true);
-      setToastMessage("Retrieving tasks...");
-      setToastColor("bg-orange-100");
-      const data = await fetchTasks();
-      setToastOpen(false);
+  try {
+    setToastOpen(true);
+    setToastMessage("Retrieving tasks...");
+    setToastColor("bg-orange-100");
+    const data = await fetchTasks();
+    
+    if (data && data.length > 0) {
       setTasks(data);
-    } catch (error) {
-      console.error("Error:", error.message);
+      setToastOpen(false);
+    } else {
+      // No tasks or error occurred
+      setTasks([]);
+      setToastMessage("Unable to load tasks. Using offline mode.");
+      setToastColor("bg-red-100");
     }
-  };
+  } catch (error) {
+    console.error("Error:", error.message);
+    setTasks([]);
+    setToastMessage("Error loading tasks");
+    setToastColor("bg-red-100");
+  }
+};
 
   const loadUsers = async () => {
     try {
