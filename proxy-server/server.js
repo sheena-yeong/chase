@@ -103,7 +103,13 @@ app.get("/airtable/tasks", async (req, res) => {
       }
     );
 
-    if (!response.ok) throw new Error(`HTTP error, status:${response.status}`);
+    if (!response.ok) {
+      // Get the error body from Airtable
+      const errorBody = await response.text();
+      console.error("Airtable Error Body:", errorBody);
+      
+      throw new Error(`HTTP error, status: ${response.status}, body: ${errorBody}`);
+    }
 
     const data = await response.json();
     const records = data.records.map((r) => ({ id: r.id, fields: r.fields }));
