@@ -124,7 +124,9 @@ app.get("/airtable/tasks", async (req, res) => {
     const records = data.records.map((r) => ({ id: r.id, fields: r.fields }));
     res.json(records);
   } catch (error) {
-    console.error("Error fetching code", error);
+    if (error.code === "ETIMEDOUT") {
+      console.log("Airtable request timed out...");
+    } else console.error("Error fetching code", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
