@@ -170,6 +170,7 @@ function TaskCard({
             <HoverCard.Content
               side="top"
               className="bg-[#fcfbf0] p-3 rounded shadow-lg w-64 border border-solid border-[#c2c2c2]"
+              onClick={(e) => e.stopPropagation()}
             >
               <p className="mb-2 font-bold">Custom Slack Message:</p>
               <textarea
@@ -180,13 +181,13 @@ function TaskCard({
               />
               <div className="flex p-0 gap-2 justify-end">
                 <button
-                  className="bg-orange-300"
+                  className="bg-purple-200"
                   onClick={() => handleRefineMessage(slackMsg)}
                 >
                   Refine with AI
                 </button>
                 <button
-                  className="bg-orange-300"
+                  className="bg-orange-200"
                   onClick={() => {
                     const currentAssigneeId = findUserIdByName(
                       task.fields.Assignee
