@@ -5,6 +5,8 @@ import { handleSendMessage, handleUpdateTask } from "../../services/services";
 import { deleteTask } from "../../services/services";
 import { FaTrashAlt, FaCheckCircle } from "react-icons/fa";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import * as HoverCard from "@radix-ui/react-hover-card";
+import { refineMessageWithAI } from "../../services/services";
 
 function TaskCard({
   tasks,
@@ -32,6 +34,30 @@ function TaskCard({
   const [description, setDescription] = useState(task.fields.Description);
   const [assignee, setAssignee] = useState(task.fields.Assignee || "");
   const [assigneeId, setAssigneeId] = useState("");
+
+  const [slackMsg, setSlackMsg] = useState("");
+
+  async function handleRefineMessage(slackMsg) {
+    try {
+      setToastMessage("Refining message...");
+      setToastOpen(true);
+      setToastColor("bg-orange-100");
+      console.log("Sending this msg to gemini:", slackMsg);
+
+      const refinedMsg = await refineMessageWithAI(slackMsg);
+      setSlackMsg(refinedMsg);
+
+      setToastMessage("Refined ✨");
+      setToastOpen(true);
+      setToastColor("bg-green-100");
+      console.log(refinedMsg);
+    } catch (error) {
+      console.log(error);
+      setToastMessage("Failed to refine message");
+      setToastOpen(true);
+      setToastColor("bg-red-100");
+    }
+  }
 
   const findUserIdByName = (realName) => {
     const user = users.find((user) => user.real_name === realName);
@@ -116,25 +142,70 @@ function TaskCard({
       </div>
 
       {task.fields.Column === "Waiting on others" && (
-        <button
-          className="bg-[#e7edff] rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 active:translate-y-[1px]"
-          aria-label="Send message"
-          onClick={(e) => {
-            e.stopPropagation();
-            const currentAssigneeId = findUserIdByName(task.fields.Assignee);
-            handleSendMessage(
-              task.fields.Task,
-              task.fields.Description,
-              task.fields.Deadline,
-              currentAssigneeId
-            );
-            setToastOpen(true);
-            setToastColor("bg-green-100");
-            setToastMessage("Slack message sent!");
-          }}
-        >
-          🪿
-        </button>
+        <HoverCard.Root>
+          <HoverCard.Trigger asChild>
+            <button
+              className="bg-[#e7edff] rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 active:translate-y-[1px]"
+              aria-label="Send message"
+              onClick={(e) => {
+                e.stopPropagation();
+                const currentAssigneeId = findUserIdByName(
+                  task.fields.Assignee
+                );
+                handleSendMessage(
+                  task.fields.Task,
+                  task.fields.Description,
+                  task.fields.Deadline,
+                  currentAssigneeId
+                );
+                setToastOpen(true);
+                setToastColor("bg-green-100");
+                setToastMessage("Slack message sent!");
+              }}
+            >
+              🪿
+            </button>
+          </HoverCard.Trigger>
+          <HoverCard.Portal>
+            <HoverCard.Content
+              side="top"
+              className="bg-[#fcfbf0] p-3 rounded shadow-lg w-64 border border-solid border-[#c2c2c2]"
+            >
+              <p className="mb-2 font-bold">Custom Slack Message:</p>
+              <textarea
+                className="min-h-[200px] w-full border rounded p-2 mb-2"
+                placeholder="Type a note..."
+                value={slackMsg}
+                onChange={(e) => setSlackMsg(e.target.value)}
+              />
+              <div className="flex p-0 gap-2 justify-end">
+                <button
+                  className="bg-orange-300"
+                  onClick={() => handleRefineMessage(slackMsg)}
+                >
+                  Refine with AI
+                </button>
+                <button
+                  className="bg-orange-300"
+                  onClick={() => {
+                    const currentAssigneeId = findUserIdByName(
+                      task.fields.Assignee
+                    );
+                    handleSendMessage(
+                      task.fields.Task,
+                      task.fields.Description,
+                      task.fields.Deadline,
+                      currentAssigneeId,
+                      slackMsg
+                    );
+                  }}
+                >
+                  Send Message
+                </button>
+              </div>
+            </HoverCard.Content>
+          </HoverCard.Portal>
+        </HoverCard.Root>
       )}
 
       <Dialog

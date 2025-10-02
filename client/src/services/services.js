@@ -3,7 +3,8 @@ export const handleSendMessage = async (
   task,
   description,
   deadline,
-  userID
+  userID,
+  refinedMsg = ""
 ) => {
   const messageFormats = [
     "HONK! This task isn't doing itself:",
@@ -12,7 +13,8 @@ export const handleSendMessage = async (
     "(Un)friendly goose reminder: this task is still waddling behind schedule:",
   ];
 
-  const randomMessageFormat =
+  const messageToUse =
+    refinedMsg ||
     messageFormats[Math.floor(Math.random() * messageFormats.length)];
 
   try {
@@ -25,7 +27,7 @@ export const handleSendMessage = async (
         },
         body: JSON.stringify({
           channel: `${userID}`,
-          text: `🪿 *${randomMessageFormat}*\nTask: ${task}\nDescription: ${description}\nDue: ${deadline}`,
+          text: `🪿 *${messageToUse}*\nTask: ${task}\nDescription: ${description}\nDue: ${deadline}`,
         }),
       }
     );
@@ -97,9 +99,12 @@ export const fetchSlackUsers = async () => {
 export const fetchTasks = async () => {
   try {
     const res = await fetch(
-      "https://chase-production-b8db.up.railway.app/airtable/tasks",
+      "https://chase-production-b8db.up.railway.app/airtable/tasks"
     );
-    if (!res.ok) throw new Error(`Failed to fetch records from Airtable Tasks, ${res.status} ${res.statusText}`);
+    if (!res.ok)
+      throw new Error(
+        `Failed to fetch records from Airtable Tasks, ${res.status} ${res.statusText}`
+      );
     return res.json();
   } catch (error) {
     console.log(error.message);
@@ -279,11 +284,29 @@ export const handleOnClose = async (setTasks) => {
       "https://chase-production-b8db.up.railway.app/airtable/tasks"
     );
 
-    if (!res.ok) throw new Error("❌ Failed to fetch records from Airtable Tasks");
+    if (!res.ok)
+      throw new Error("❌ Failed to fetch records from Airtable Tasks");
 
     const data = await res.json();
     setTasks(data);
   } catch (error) {
     console.log(`❌ error: ${error.message}`);
+  }
+};
+
+/* Gemini fetches */
+export const refineMessageWithAI = async (slackMsg) => {
+  try {
+    const response = await fetch("http://localhost:3001/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: slackMsg }),
+    });
+    const data = await response.json();
+    console.log("Gemini response:", data);
+    return data.refinedMessage; // ✅ RETURN the refined message
+  } catch (error) {
+    console.log("❌ Failed to send message to Gemini:", error);
+    throw error; // Re-throw so the caller knows it failed
   }
 };
