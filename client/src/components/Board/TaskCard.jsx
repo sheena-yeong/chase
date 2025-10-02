@@ -7,6 +7,7 @@ import { FaTrashAlt, FaCheckCircle } from "react-icons/fa";
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import * as HoverCard from "@radix-ui/react-hover-card";
 import { refineMessageWithAI } from "../../services/services";
+import geminiIcon from "../../assets/gemini_icon.png";
 
 function TaskCard({
   tasks,
@@ -179,12 +180,12 @@ function TaskCard({
                 onChange={(e) => setSlackMsg(e.target.value)}
               />
               <div className="flex p-0 gap-2 justify-end">
-                <button
-                  className="bg-purple-200"
+                <img
+                  src={geminiIcon}
+                  alt="gemini logo"
+                  className="border border-blue-100 w-30 h-8 cursor-pointer rounded-full hover:opacity-80 active:scale-95 transition"
                   onClick={() => handleRefineMessage(slackMsg)}
-                >
-                  Refine with AI
-                </button>
+                />
                 <button
                   className="bg-orange-200"
                   onClick={() => {

@@ -15,6 +15,7 @@ Visit the live application: https://outstanding-abundance-production.up.railway.
 - Drag and Drop - Move tasks between columns (To Do, In Progress, Done) with smooth drag-and-drop functionality
 - Assign to Users - Link tasks to team members pulled directly from your Slack workspace
 - Chase Users - Click a button to send formatted task details to the assignee via Chase bot DM
+- Refine Chase Message with AI - Hover on the Chase button to access options to customise your message, or use the help of AI to refine it
 - Task Summary - Generate and send a comprehensive summary of all tasks assigned to a specific user with one click
 
 **Data & Integration**
@@ -56,7 +57,7 @@ Visit the live application: https://outstanding-abundance-production.up.railway.
 - **Frontend:** React + Vite + TailwindCSS + ReactDnD
 - **Backend:** Node.js + Express.js
 - **Database:** Airtable
-- **APIs:** Slack API
+- **APIs:** Slack API, Gemini API
 - **Deployment**: Railway
 
 ## Next Steps
