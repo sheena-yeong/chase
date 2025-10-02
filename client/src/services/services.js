@@ -85,11 +85,11 @@ export const fetchSlackUsers = async () => {
       "https://chase-production-b8db.up.railway.app/slack/users"
     );
     if (!res.ok) {
-      throw new Error("Failed to fetch Slack users");
+      throw new Error("❌ Failed to fetch Slack users");
     }
     return await res.json();
   } catch (error) {
-    console.log("Error fetching users from proxy", error.message);
+    console.log("❌ Error fetching users from proxy", error.message);
   }
 };
 
@@ -199,13 +199,13 @@ export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
       throw new Error(`Failed to update task: ${res.status} ${res.statusText}`);
     }
     const updatedRecord = await res.json();
-    console.log("Task updated successfully", updatedRecord);
+    console.log("✅ Task updated successfully");
 
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === taskId ? updatedRecord : task))
     );
   } catch (error) {
-    console.error("Failed to update task:", error);
+    console.error("❌ Failed to update task:", error);
     setTasks(originalTasks);
   }
 };
@@ -260,13 +260,13 @@ export const handleUpdateTask = async (
       throw new Error(`Failed to update task: ${res.status} ${res.statusText}`);
     }
     const updatedRecord = await res.json();
-    console.log("Task updated successfully", updatedRecord);
+    console.log("✅ Task updated successfully", updatedRecord);
 
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === taskId ? updatedRecord : task))
     );
   } catch (error) {
-    console.error("Failed to update task:", error);
+    console.error("❌ Failed to update task:", error);
 
     setTasks(originalTasks);
   }
@@ -279,7 +279,7 @@ export const handleOnClose = async (setTasks) => {
       "https://chase-production-b8db.up.railway.app/airtable/tasks"
     );
 
-    if (!res.ok) throw new Error("Failed to fetch records from Airtable Tasks");
+    if (!res.ok) throw new Error("❌ Failed to fetch records from Airtable Tasks");
 
     const data = await res.json();
     setTasks(data);

@@ -90,12 +90,7 @@ function Users({ users, tasks, setToastOpen, setToastMessage, setToastColor }) {
                           <div className="flex-shrink-0 h-8 w-8">
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={
-                                user.profile?.image_32 ||
-                                `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                                  user.real_name || user.name
-                                )}&background=4f46e5&color=fff`
-                              }
+                              src={user.profile.image_32}
                               alt={user.real_name || user.name}
                             />
                           </div>
