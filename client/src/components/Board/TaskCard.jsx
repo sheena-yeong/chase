@@ -42,7 +42,6 @@ function TaskCard({
       setToastMessage("Refining message...");
       setToastOpen(true);
       setToastColor("bg-orange-100");
-      console.log("Sending this msg to gemini:", slackMsg);
 
       const refinedMsg = await refineMessageWithAI(slackMsg);
       setSlackMsg(refinedMsg);
@@ -142,7 +141,7 @@ function TaskCard({
       </div>
 
       {task.fields.Column === "Waiting on others" && (
-        <HoverCard.Root>
+        <HoverCard.Root openDelay={100}>
           <HoverCard.Trigger asChild>
             <button
               className="bg-[#e7edff] rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 active:translate-y-[1px]"

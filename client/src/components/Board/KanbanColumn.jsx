@@ -137,9 +137,9 @@ function KanbanColumn({
               </select>
             )}
             <div className="flex gap-2 justify-end">
-              <button className="bg-orange-300">Add</button>
+              <button className="bg-orange-200">Add</button>
               <button
-                className="bg-orange-300"
+                className="bg-orange-200"
                 onClick={(e) => {
                   e.preventDefault();
                   setshowAddNewTask(false);
