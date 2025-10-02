@@ -56,5 +56,7 @@ Visit the live application: https://outstanding-abundance-production.up.railway.
 - **Deployment**: Railway
 
 ## Next Steps
-
--
+- TypeScript: Run program in TypeScript instead
+- OAuth: Add OAuth and have individual boards for each user
+- Redis caching: Cache frequently accessed data (tasks, users) to reduce Airtable API calls
+- Database migration: Move from Airtable to PostgreSQL/MongoDB for more control and scalability
