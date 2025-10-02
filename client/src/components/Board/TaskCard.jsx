@@ -39,6 +39,8 @@ function TaskCard({
   const [slackMsg, setSlackMsg] = useState("");
 
   async function handleRefineMessage(slackMsg) {
+    if (!slackMsg) return;
+    
     try {
       setToastMessage("Refining message...");
       setToastOpen(true);
@@ -142,7 +144,7 @@ function TaskCard({
       </div>
 
       {task.fields.Column === "Waiting on others" && (
-        <HoverCard.Root openDelay={100}>
+        <HoverCard.Root openDelay={200}>
           <HoverCard.Trigger asChild>
             <button
               className="bg-[#e7edff] rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 active:translate-y-[1px]"

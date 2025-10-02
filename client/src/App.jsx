@@ -26,7 +26,6 @@ function App() {
       setTasks(data);
       setToastOpen(false);
     } else {
-      // No tasks or error occurred
       setTasks([]);
       setToastMessage("Unable to load tasks. Using offline mode.");
       setToastColor("bg-red-100");

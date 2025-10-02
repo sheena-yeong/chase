@@ -145,11 +145,9 @@ export const deleteTask = async (id) => {
       }
     );
     if (res.ok) {
-      // Backend may not return JSON; just return the deleted ID
       console.log("✅ Task deleted successfully!");
       return { id };
     } else {
-      // Attempt to read response as text (fallback if it's HTML)
       const text = await res.text();
       console.log(`❌ Task Deletion error: ${text}`);
       return null;
@@ -179,10 +177,8 @@ export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
     )
   );
   try {
-    // Prepare fields to update
     const fieldsToUpdate = { Column: newColumn };
 
-    // Clear assignee in database if moving away from "Waiting on others"
     if (newColumn !== "Waiting on others") {
       fieldsToUpdate.Assignee = "";
     }
@@ -304,9 +300,9 @@ export const refineMessageWithAI = async (slackMsg) => {
     });
     const data = await response.json();
     console.log("Gemini response:", data);
-    return data.refinedMessage; // ✅ RETURN the refined message
+    return data.refinedMessage;
   } catch (error) {
     console.log("❌ Failed to send message to Gemini:", error);
-    throw error; // Re-throw so the caller knows it failed
+    throw error;
   }
 };
