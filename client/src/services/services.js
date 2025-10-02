@@ -134,7 +134,7 @@ export const addTask = async (newTask) => {
 export const deleteTask = async (id) => {
   try {
     const res = await fetch(
-      `https://chase-production-b8db.up.railway.app/tasks/${id}`,
+      `https://chase-production-b8db.up.railway.app/airtable/tasks/${id}`,
       {
         method: "DELETE",
       }

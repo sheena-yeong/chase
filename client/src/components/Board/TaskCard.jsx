@@ -38,9 +38,8 @@ function TaskCard({
     return user ? user.id : null;
   };
 
-  async function handleDelete(e, taskId) {
-    e.preventDefault();
-    console.log(taskId);
+  async function handleDelete(taskId) {
+    console.log("Deleting this task...", taskId);
     try {
       await deleteTask(taskId);
       setTasks((prev) => prev.filter((task) => task.id !== taskId));
@@ -237,7 +236,7 @@ function TaskCard({
                 <FaCheckCircle />
               </button>
               <button
-                onClick={(e) => handleDelete(e, task.id)}
+                onClick={(e) => handleDelete(task.id)}
                 className="bg-red-200"
               >
                 <FaTrashAlt />
