@@ -6,6 +6,11 @@ const SLACK_BASE_URL = "https://slack.com/api";
 const AIRTABLE_BASE_URL = "https://api.airtable.com/v0";
 const PORT = process.env.PORT;
 
+const { GoogleGenAI } = require("@google/genai");
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
+
 const app = express();
 
 app.use(
