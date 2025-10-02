@@ -40,7 +40,7 @@ function TaskCard({
 
   async function handleRefineMessage(slackMsg) {
     if (!slackMsg) return;
-    
+
     try {
       setToastMessage("Refining message...");
       setToastOpen(true);
@@ -144,7 +144,7 @@ function TaskCard({
       </div>
 
       {task.fields.Column === "Waiting on others" && (
-        <HoverCard.Root openDelay={200}>
+        <HoverCard.Root openDelay={300}>
           <HoverCard.Trigger asChild>
             <button
               className="bg-[#e7edff] rounded px-3 py-1 text-xs cursor-pointer transition-colors duration-200 ml-2 active:translate-y-[1px]"
@@ -171,13 +171,12 @@ function TaskCard({
           <HoverCard.Portal>
             <HoverCard.Content
               side="top"
-              className="bg-[#fcfbf0] p-3 rounded shadow-lg w-64 border border-solid border-[#c2c2c2]"
+              className="bg-[#fcfbf0] p-3 m-3 rounded-xl shadow-lg w-64 border border-solid border-[#c2c2c2]"
               onClick={(e) => e.stopPropagation()}
             >
-              <p className="mb-2 font-bold">Custom Slack Message:</p>
+              <p className="mb-2 font-bold">Custom a Slack Message to go along:</p>
               <textarea
                 className="min-h-[200px] w-full border rounded p-2 mb-2"
-                placeholder="Type a note..."
                 value={slackMsg}
                 onChange={(e) => setSlackMsg(e.target.value)}
               />
