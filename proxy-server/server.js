@@ -8,13 +8,15 @@ const PORT = process.env.PORT;
 
 const app = express();
 
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://outstanding-abundance-production.up.railway.app'
-  ],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://outstanding-abundance-production.up.railway.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json()); //automatically parse JSON request bodies into JavaScript objects
 
 /************************  Slack Routes ************************/
@@ -43,7 +45,7 @@ app.post("/slack/send", async (req, res) => {
       const dmData = await dmRes.json();
 
       if (!dmData.ok) {
-        throw new Error("Failed to open conversation", dmData.error)
+        throw new Error("Failed to open conversation", dmData.error);
       }
     }
 
@@ -107,8 +109,10 @@ app.get("/airtable/tasks", async (req, res) => {
       // Get the error body from Airtable
       const errorBody = await response.text();
       console.error("Airtable Error Body:", errorBody);
-      
-      throw new Error(`HTTP error, status: ${response.status}, body: ${errorBody}`);
+
+      throw new Error(
+        `HTTP error, status: ${response.status}, body: ${errorBody}`
+      );
     }
 
     const data = await response.json();
@@ -213,6 +217,34 @@ app.delete("/airtable/tasks/:id", async (req, res) => {
   }
 });
 
+/************************  Gemini Routes ************************/
+app.post("/gemini", async (req, res) => {
+  const { message } = req.body;
+
+  if (!message || message.trim() === "") return;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `You are a helpful assistant that refines Slack messages to be more professional and clear. Please refine the following message: "${message}". Respond back with nothing but the message, with no quotation marks and in a format that is ready to be sent. Use a little bit of sarcasm and light-hearted humour. Cap the character limit at 200.`,
+    });
+
+    const refinedText = response.text;
+
+    console.log("✨ Refined text:", refinedText);
+    res.json({ refinedMessage: refinedText });
+  } catch (error) {
+    console.error("❌ Gemini API Error:", error);
+    console.error("❌ Error message:", error.message);
+    res.status(500).json({
+      error: "Failed to refine message with Gemini",
+      details: error.message,
+    });
+  }
+});
+
 app.listen(PORT, () => {
-  console.log(`Server running on https://chase-production-b8db.up.railway.app/`);
+  console.log(
+    `Server running on https://chase-production-b8db.up.railway.app/`
+  );
 });
