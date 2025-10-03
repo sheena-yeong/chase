@@ -45,12 +45,12 @@ function TaskCard({
     if (!slackMsg) return;
 
     try {
-      setIsSpinning(true)
+      setIsSpinning(true);
 
       const refinedMsg = await refineMessageWithAI(slackMsg);
       setSlackMsg(refinedMsg);
 
-      setIsSpinning(false)
+      setIsSpinning(false);
     } catch (error) {
       console.log(error);
       setToastMessage("Failed to refine message");
@@ -172,7 +172,9 @@ function TaskCard({
               className="bg-[#fcfbf0] p-3 m-3 rounded-xl shadow-lg w-64 border border-solid border-[#c2c2c2]"
               onClick={(e) => e.stopPropagation()}
             >
-              <p className="mb-2 text-black font-bold">Custom a Slack Message to go along:</p>
+              <p className="mb-2 text-black font-bold">
+                Custom a Slack Message to go along:
+              </p>
               <textarea
                 className="min-h-[200px] text-black w-full border rounded p-2 mb-2"
                 value={slackMsg}
@@ -180,14 +182,14 @@ function TaskCard({
               />
               <div className="flex p-0 gap-2 justify-end">
                 <div className="flex flex-col items-center gap-2">
-                <img
-                  src={geminiIcon}
-                  alt="gemini logo"
-                  className="border border-blue-100 w-30 h-8 cursor-pointer rounded-full hover:opacity-80 active:scale-95 transition"
-                  onClick={() => handleRefineMessage(slackMsg)}
+                  <img
+                    src={geminiIcon}
+                    alt="gemini logo"
+                    className="border border-blue-100 w-30 h-8 cursor-pointer rounded-full hover:opacity-80 active:scale-95 transition"
+                    onClick={() => handleRefineMessage(slackMsg)}
                   />
-                  </div>
-                  {isSpinning && <Spinner />}
+                {isSpinning && <Spinner />}
+                </div>
                 <button
                   className="bg-orange-200 text-black"
                   onClick={() => {
