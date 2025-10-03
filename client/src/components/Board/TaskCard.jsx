@@ -8,6 +8,7 @@ import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import * as HoverCard from "@radix-ui/react-hover-card";
 import { refineMessageWithAI } from "../../services/services";
 import geminiIcon from "../../assets/gemini_icon.png";
+import Spinner from "../UI/Spinner";
 
 function TaskCard({
   tasks,
@@ -38,21 +39,18 @@ function TaskCard({
 
   const [slackMsg, setSlackMsg] = useState("");
 
+  const [isSpinning, setIsSpinning] = useState(false);
+
   async function handleRefineMessage(slackMsg) {
     if (!slackMsg) return;
 
     try {
-      setToastMessage("Refining message...");
-      setToastOpen(true);
-      setToastColor("bg-orange-100");
+      setIsSpinning(true)
 
       const refinedMsg = await refineMessageWithAI(slackMsg);
       setSlackMsg(refinedMsg);
 
-      setToastMessage("Refined ✨");
-      setToastOpen(true);
-      setToastColor("bg-green-100");
-      console.log(refinedMsg);
+      setIsSpinning(false)
     } catch (error) {
       console.log(error);
       setToastMessage("Failed to refine message");
@@ -181,12 +179,15 @@ function TaskCard({
                 onChange={(e) => setSlackMsg(e.target.value)}
               />
               <div className="flex p-0 gap-2 justify-end">
+                <div className="flex flex-col items-center gap-2">
                 <img
                   src={geminiIcon}
                   alt="gemini logo"
                   className="border border-blue-100 w-30 h-8 cursor-pointer rounded-full hover:opacity-80 active:scale-95 transition"
                   onClick={() => handleRefineMessage(slackMsg)}
-                />
+                  />
+                  </div>
+                  {isSpinning && <Spinner />}
                 <button
                   className="bg-orange-200 text-black"
                   onClick={() => {
