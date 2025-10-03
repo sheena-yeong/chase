@@ -116,7 +116,7 @@ app.get("/airtable/tasks", async (req, res) => {
       console.error("Airtable Error Body:", errorBody);
 
       throw new Error(
-        `HTTP error, status: ${response.status}, body: ${errorBody}`
+        `status: ${response.status}, body: ${errorBody}`
       );
     }
 
@@ -241,8 +241,8 @@ app.post("/gemini", async (req, res) => {
     console.log("✨ Refined text:", refinedText);
     res.json({ refinedMessage: refinedText });
   } catch (error) {
-    console.error("❌ Gemini API Error:", error);
-    console.error("❌ Error message:", error.message);
+    console.error("Gemini API Error:", error);
+    console.error("Error message:", error.message);
     res.status(500).json({
       error: "Failed to refine message with Gemini",
       details: error.message,

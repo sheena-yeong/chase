@@ -62,7 +62,7 @@ function App() {
           element={
             <div className="font-[Avenir]">
               <div className="flex h-[calc(100vh-70px)]">
-                <div className="flex flex-1 gap-[15px] p-[15px] overflow-x-auto">
+                <div className="flex flex-1 gap-[15px] p-[15px] overflow-x-auto bg-white">
                   <KanbanBoard
                     setTasks={setTasks}
                     tasks={tasks}

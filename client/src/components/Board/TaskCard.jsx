@@ -174,9 +174,9 @@ function TaskCard({
               className="bg-[#fcfbf0] p-3 m-3 rounded-xl shadow-lg w-64 border border-solid border-[#c2c2c2]"
               onClick={(e) => e.stopPropagation()}
             >
-              <p className="mb-2 font-bold">Custom a Slack Message to go along:</p>
+              <p className="mb-2 text-black font-bold">Custom a Slack Message to go along:</p>
               <textarea
-                className="min-h-[200px] w-full border rounded p-2 mb-2"
+                className="min-h-[200px] text-black w-full border rounded p-2 mb-2"
                 value={slackMsg}
                 onChange={(e) => setSlackMsg(e.target.value)}
               />
@@ -188,7 +188,7 @@ function TaskCard({
                   onClick={() => handleRefineMessage(slackMsg)}
                 />
                 <button
-                  className="bg-orange-200"
+                  className="bg-orange-200 text-black"
                   onClick={() => {
                     const currentAssigneeId = findUserIdByName(
                       task.fields.Assignee

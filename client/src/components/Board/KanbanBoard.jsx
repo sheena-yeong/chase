@@ -15,7 +15,7 @@ function KanbanBoard({
 
   return (
     <>
-      <div className="flex flex-1 gap-[15px] p-[10px] overflow-x-auto">
+      <div className="flex flex-1 gap-[15px] p-[10px] overflow-x-auto bg-white text-black">
         <DndProvider backend={HTML5Backend}>
           {columns.map((column, index) => (
             <KanbanColumn

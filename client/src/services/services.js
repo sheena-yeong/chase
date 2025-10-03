@@ -35,12 +35,12 @@ export const handleSendMessage = async (
     const data = await res.json();
 
     if (data.ok) {
-      console.log("✅ Message sent successfully!");
+      console.log("Message sent successfully!");
     } else {
-      console.log(`❌ Sending error: ${data.error}`);
+      console.log(`Sending error: ${data.error}`);
     }
   } catch (error) {
-    console.log(`❌ Sending error: ${error.message}`);
+    console.log(`Sending error: ${error.message}`);
   }
 };
 
@@ -72,12 +72,12 @@ export const handleSendSummary = async (taskData, userId) => {
     const data = await res.json();
 
     if (data.ok) {
-      console.log("✅ Message sent successfully!");
+      console.log("Message sent successfully!");
     } else {
-      console.log(`❌ Sending error: ${data.error}`);
+      console.log(`Sending error: ${data.error}`);
     }
   } catch (error) {
-    console.log(`❌ Sending error: ${error.message}`);
+    console.log(`Sending error: ${error.message}`);
   }
 };
 
@@ -87,11 +87,11 @@ export const fetchSlackUsers = async () => {
       "https://chase-production-b8db.up.railway.app/slack/users"
     );
     if (!res.ok) {
-      throw new Error("❌ Failed to fetch Slack users");
+      throw new Error("Failed to fetch Slack users");
     }
     return await res.json();
   } catch (error) {
-    console.log("❌ Error fetching users from proxy", error.message);
+    console.log("Error fetching users from proxy", error.message);
   }
 };
 
@@ -126,13 +126,13 @@ export const addTask = async (newTask) => {
 
     if (data.id) {
       //airtable doesnt return ok property
-      console.log("✅ Task added succesfully!", data);
+      console.log("Task added succesfully!", data);
       return data;
     } else {
-      console.log(`❌ Task Adding error: ${data.error}`);
+      console.log(`Task Adding error: ${data.error}`);
     }
   } catch (error) {
-    console.log(`❌ Task Adding: ${error.message}`);
+    console.log(`Task Adding: ${error.message}`);
   }
 };
 
@@ -145,15 +145,15 @@ export const deleteTask = async (id) => {
       }
     );
     if (res.ok) {
-      console.log("✅ Task deleted successfully!");
+      console.log("Task deleted successfully!");
       return { id };
     } else {
       const text = await res.text();
-      console.log(`❌ Task Deletion error: ${text}`);
+      console.log(`Task Deletion error: ${text}`);
       return null;
     }
   } catch (error) {
-    console.log(`❌ Task Deletion: ${error.message}`);
+    console.log(`Task Deletion: ${error.message}`);
     return null;
   }
 };
@@ -200,13 +200,13 @@ export const handleMoveTask = async (tasks, setTasks, taskId, newColumn) => {
       throw new Error(`Failed to update task: ${res.status} ${res.statusText}`);
     }
     const updatedRecord = await res.json();
-    console.log("✅ Task updated successfully");
+    console.log("Task updated successfully");
 
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === taskId ? updatedRecord : task))
     );
   } catch (error) {
-    console.error("❌ Failed to update task:", error);
+    console.error("Failed to update task:", error);
     setTasks(originalTasks);
   }
 };
@@ -261,13 +261,13 @@ export const handleUpdateTask = async (
       throw new Error(`Failed to update task: ${res.status} ${res.statusText}`);
     }
     const updatedRecord = await res.json();
-    console.log("✅ Task updated successfully", updatedRecord);
+    console.log("Task updated successfully", updatedRecord);
 
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === taskId ? updatedRecord : task))
     );
   } catch (error) {
-    console.error("❌ Failed to update task:", error);
+    console.error("Failed to update task:", error);
 
     setTasks(originalTasks);
   }
@@ -281,12 +281,12 @@ export const handleOnClose = async (setTasks) => {
     );
 
     if (!res.ok)
-      throw new Error("❌ Failed to fetch records from Airtable Tasks");
+      throw new Error("Failed to fetch records from Airtable Tasks");
 
     const data = await res.json();
     setTasks(data);
   } catch (error) {
-    console.log(`❌ error: ${error.message}`);
+    console.log(`error: ${error.message}`);
   }
 };
 
@@ -302,7 +302,7 @@ export const refineMessageWithAI = async (slackMsg) => {
     console.log("Gemini response:", data);
     return data.refinedMessage;
   } catch (error) {
-    console.log("❌ Failed to send message to Gemini:", error);
+    console.log("Failed to send message to Gemini:", error);
     throw error;
   }
 };
