@@ -233,7 +233,7 @@ app.post("/gemini", async (req, res) => {
   try {
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: `You are a helpful assistant that refines Slack messages that are drafted to be sent to someone who needs to complete the task that will be appended below this message. Please refine the following message: "${message}". Respond back with nothing but the message, with no quotation marks and in a format that is ready to be sent. Use a little bit of sarcasm and light-hearted humour but avoid swear words or NSFW. Cap the character limit at 200.`,
+      contents: `You are an assistant that ONLY outputs refined Slack chaser messages; rewrite the draft message "${message}" so it is a light-hearted, slightly sarcastic reminder for the assignee to complete their task, output only the final message with no quotes or explanations, always sound like a chaser even if the input is nonsense, and keep it under 200 characters.`,
     });
 
     const refinedText = response.text;
