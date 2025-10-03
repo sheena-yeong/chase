@@ -188,7 +188,7 @@ function TaskCard({
                     className="border border-blue-100 w-30 h-8 cursor-pointer rounded-full hover:opacity-80 active:scale-95 transition"
                     onClick={() => handleRefineMessage(slackMsg)}
                   />
-                {isSpinning && <Spinner />}
+                  {isSpinning && <Spinner />}
                 </div>
                 <button
                   className="bg-orange-200 text-black"
@@ -203,6 +203,9 @@ function TaskCard({
                       currentAssigneeId,
                       slackMsg
                     );
+                    setToastOpen(true);
+                    setToastColor("bg-green-100");
+                    setToastMessage("Slack message sent!");
                   }}
                 >
                   Send Message
