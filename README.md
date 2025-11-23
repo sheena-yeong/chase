@@ -27,7 +27,7 @@ Visit the live application: https://outstanding-abundance-production.up.railway.
   - Direct messaging to assigned team members
 
 ## Screenshots
-**Kanban Board**: Drag and drop tasks between columns with individual Slack messaging
+**Kanban Board**: Drag and drop tasks between columns
 
 <img src="client/src/assets/Screenshots/Drag_and_Drop.png" alt="Task being dragged and dropped to another column" width="1024" />
 
@@ -44,6 +44,9 @@ Visit the live application: https://outstanding-abundance-production.up.railway.
 <img src="client/src/assets/Screenshots/Click_Chase_Btn.png" alt="Clicking on Chase button in App" width="1024" />
 
 <img src="client/src/assets/Screenshots/Slack_Message.png" alt="Messages in Slack featuring the message from Chase bot" width="1024" />
+
+**AI Integration**: Draft chaser messages with one click
+<img width="514" height="631" alt="Screenshot 2025-11-23 at 10 01 15" src="https://github.com/user-attachments/assets/7b8c5445-3261-4d8b-a182-2aa7c4d9f70e" />
 
 ## Attributions
 
