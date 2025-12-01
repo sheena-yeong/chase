@@ -1,7 +1,6 @@
 # Chase - Kanban Task Manager
 
 A web-based Kanban board built with **React (Vite)** and deployed on **Railway**. It provides a simple drag-and-drop interface for managing tasks across customizable columns.<br>
-Visit the live application: https://outstanding-abundance-production.up.railway.app/
 
 <p align="center">
   <img src="client/src/assets/chase_logo.png" alt="Chase Logo" width="200" />
@@ -46,6 +45,7 @@ Visit the live application: https://outstanding-abundance-production.up.railway.
 <img src="client/src/assets/Screenshots/Slack_Message.png" alt="Messages in Slack featuring the message from Chase bot" width="1024" />
 
 **AI Integration**: Draft chaser messages with one click<br>
+
 <img width="514" height="631" alt="Screenshot 2025-11-23 at 10 01 15" src="https://github.com/user-attachments/assets/7b8c5445-3261-4d8b-a182-2aa7c4d9f70e" />
 
 ## Attributions
