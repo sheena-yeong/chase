@@ -11,7 +11,7 @@ A web-based Kanban board built with **React (Vite)** and deployed on **Railway**
 **Task Management**
 
 - Create, Edit, and Delete Tasks - Easily manage your tasks with a clean, intuitive interface
-- Drag and Drop - Move tasks between columns (To Do, In Progress, Done) with smooth drag-and-drop functionality
+- Drag and Drop - Move tasks between columns (Waiting on Others, Not Started, In Progress, Done) with smooth drag-and-drop functionality
 - Assign to Users - Link tasks to team members pulled directly from your Slack workspace
 - Chase Users - Click a button to send formatted task details to the assignee via Chase bot DM
 - Refine Chase Message with AI - Hover on the Chase button to access options to customise your message, or use the help of AI to refine it
